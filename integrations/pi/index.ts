@@ -104,6 +104,17 @@ export default function ansysResearchMcpExtension(pi: ExtensionAPI) {
         { name: "pi-ansys-research-runner", version: "0.13.0" },
         { capabilities: {} },
       );
+      nextClient.onclose = () => {
+        if (client === nextClient) {
+          client = undefined;
+          transport = undefined;
+          connection = undefined;
+          connectedTools = [];
+        }
+      };
+      nextClient.onerror = (error) => {
+        stderrTail = `${stderrTail}\n${error.message}`.trim().slice(-4000);
+      };
       try {
         await nextClient.connect(nextTransport);
         const listed = await nextClient.listTools(undefined, { timeout: 30_000 });
