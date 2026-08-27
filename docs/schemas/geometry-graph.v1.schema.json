@@ -1,0 +1,445 @@
+{
+  "$defs": {
+    "Area": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "BodyDescriptor": {
+      "additionalProperties": false,
+      "description": "One solid-body descriptor detached from a live solver object.",
+      "properties": {
+        "bounding_box": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "centroid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "entity_type": {
+          "$ref": "#/$defs/EntityType",
+          "default": "solid"
+        },
+        "internal_runtime_id": {
+          "minLength": 1,
+          "title": "Internal Runtime Id",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        },
+        "named_selections": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Named Selections",
+          "type": "array"
+        },
+        "principal_axes": {
+          "anyOf": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/Vector3"
+                },
+                {
+                  "$ref": "#/$defs/Vector3"
+                },
+                {
+                  "$ref": "#/$defs/Vector3"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Principal Axes"
+        },
+        "principal_dimensions": {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "$ref": "#/$defs/Length"
+            }
+          ],
+          "title": "Principal Dimensions",
+          "type": "array"
+        },
+        "solid": {
+          "default": true,
+          "title": "Solid",
+          "type": "boolean"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "stable_key": {
+          "minLength": 1,
+          "title": "Stable Key",
+          "type": "string"
+        },
+        "surface_area": {
+          "$ref": "#/$defs/Area"
+        },
+        "volume": {
+          "$ref": "#/$defs/Volume"
+        }
+      },
+      "required": [
+        "stable_key",
+        "internal_runtime_id",
+        "display_name",
+        "volume",
+        "surface_area",
+        "centroid",
+        "bounding_box",
+        "principal_dimensions",
+        "source_path"
+      ],
+      "title": "BodyDescriptor",
+      "type": "object"
+    },
+    "BoundingBox": {
+      "additionalProperties": false,
+      "description": "Axis-aligned bounding box in SI model coordinates.",
+      "properties": {
+        "maximum": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "minimum": {
+          "$ref": "#/$defs/Vector3"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "title": "BoundingBox",
+      "type": "object"
+    },
+    "EntityType": {
+      "description": "Geometry entity types exposed by the graph.",
+      "enum": [
+        "solid"
+      ],
+      "title": "EntityType",
+      "type": "string"
+    },
+    "FaceDescriptor": {
+      "additionalProperties": false,
+      "description": "One face descriptor detached from a live solver object.",
+      "properties": {
+        "adjacent_body_keys": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Adjacent Body Keys",
+          "type": "array"
+        },
+        "area": {
+          "$ref": "#/$defs/Area"
+        },
+        "axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "bounding_box": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "centroid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "external": {
+          "title": "External",
+          "type": "boolean"
+        },
+        "interface": {
+          "title": "Interface",
+          "type": "boolean"
+        },
+        "internal_runtime_id": {
+          "minLength": 1,
+          "title": "Internal Runtime Id",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        },
+        "named_selections": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Named Selections",
+          "type": "array"
+        },
+        "normal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_body_key": {
+          "minLength": 1,
+          "title": "Parent Body Key",
+          "type": "string"
+        },
+        "stable_key": {
+          "minLength": 1,
+          "title": "Stable Key",
+          "type": "string"
+        },
+        "surface_type": {
+          "$ref": "#/$defs/SurfaceType"
+        }
+      },
+      "required": [
+        "stable_key",
+        "internal_runtime_id",
+        "parent_body_key",
+        "display_name",
+        "surface_type",
+        "area",
+        "centroid",
+        "external",
+        "interface",
+        "bounding_box"
+      ],
+      "title": "FaceDescriptor",
+      "type": "object"
+    },
+    "GeometryCapabilityTier": {
+      "description": "Geometry evidence level used to construct a graph.",
+      "enum": [
+        "full_semantic",
+        "source_bound_exact"
+      ],
+      "title": "GeometryCapabilityTier",
+      "type": "string"
+    },
+    "Length": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "PhysicalDimension": {
+      "description": "Supported physical dimensions in v0.x contracts.",
+      "enum": [
+        "length",
+        "area",
+        "volume",
+        "time",
+        "absolute_temperature",
+        "temperature_difference",
+        "thermal_conductivity",
+        "density",
+        "specific_heat",
+        "heat_transfer_coefficient",
+        "heat_flux",
+        "volumetric_heat_generation",
+        "power"
+      ],
+      "title": "PhysicalDimension",
+      "type": "string"
+    },
+    "PhysicalQuantity": {
+      "additionalProperties": false,
+      "description": "Original user quantity paired with a finite SI-normalized value.",
+      "properties": {
+        "dimension": {
+          "$ref": "#/$defs/PhysicalDimension"
+        },
+        "original": {
+          "minLength": 1,
+          "title": "Original",
+          "type": "string"
+        },
+        "si_unit": {
+          "minLength": 1,
+          "title": "Si Unit",
+          "type": "string"
+        },
+        "si_value": {
+          "title": "Si Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "original",
+        "si_value",
+        "si_unit",
+        "dimension"
+      ],
+      "title": "PhysicalQuantity",
+      "type": "object"
+    },
+    "SurfaceType": {
+      "description": "Surface classifications available to v0.x selectors.",
+      "enum": [
+        "planar",
+        "cylindrical",
+        "conical",
+        "spherical",
+        "other",
+        "unknown"
+      ],
+      "title": "SurfaceType",
+      "type": "string"
+    },
+    "Vector3": {
+      "description": "Finite three-dimensional vector serialized as a JSON array.",
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Vector3",
+      "type": "array"
+    },
+    "Volume": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/geometry-graph.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Complete deterministic geometry inspection graph for one source model.",
+  "properties": {
+    "bodies": {
+      "items": {
+        "$ref": "#/$defs/BodyDescriptor"
+      },
+      "title": "Bodies",
+      "type": "array"
+    },
+    "capability_tier": {
+      "$ref": "#/$defs/GeometryCapabilityTier",
+      "default": "full_semantic"
+    },
+    "faces": {
+      "items": {
+        "$ref": "#/$defs/FaceDescriptor"
+      },
+      "title": "Faces",
+      "type": "array"
+    },
+    "length_unit": {
+      "const": "m",
+      "default": "m",
+      "title": "Length Unit",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    },
+    "schema_version": {
+      "default": 1,
+      "enum": [
+        1,
+        2
+      ],
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_path": {
+      "minLength": 1,
+      "title": "Source Path",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_path",
+    "source_sha256",
+    "bodies",
+    "faces"
+  ],
+  "title": "GeometryGraph",
+  "type": "object"
+}

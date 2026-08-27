@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "VerificationMetric": {
+      "additionalProperties": false,
+      "description": "One expected-versus-observed comparison with explicit tolerance.",
+      "properties": {
+        "absolute_error": {
+          "minimum": 0.0,
+          "title": "Absolute Error",
+          "type": "number"
+        },
+        "absolute_tolerance": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Absolute Tolerance"
+        },
+        "expected": {
+          "title": "Expected",
+          "type": "number"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "observed": {
+          "title": "Observed",
+          "type": "number"
+        },
+        "relative_error": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Error"
+        },
+        "relative_tolerance": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Tolerance"
+        },
+        "status": {
+          "$ref": "#/$defs/VerificationStatus"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "expected",
+        "observed",
+        "unit",
+        "absolute_error",
+        "status"
+      ],
+      "title": "VerificationMetric",
+      "type": "object"
+    },
+    "VerificationStatus": {
+      "description": "Allowed status values for independent result checks.",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "NOT_RUN",
+        "NOT_AVAILABLE",
+        "INCONCLUSIVE",
+        "PARTIAL"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/thermal-verification.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Independent analytic or conservation verification result.",
+  "properties": {
+    "assumptions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "checks": {
+      "additionalProperties": {
+        "$ref": "#/$defs/VerificationStatus"
+      },
+      "title": "Checks",
+      "type": "object"
+    },
+    "metrics": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/VerificationMetric"
+      },
+      "title": "Metrics",
+      "type": "array"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    },
+    "reference": {
+      "minLength": 1,
+      "title": "Reference",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/VerificationStatus"
+    }
+  },
+  "required": [
+    "reference",
+    "status"
+  ],
+  "title": "PhysicalVerificationReport",
+  "type": "object"
+}

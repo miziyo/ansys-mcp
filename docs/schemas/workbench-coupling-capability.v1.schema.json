@@ -1,0 +1,220 @@
+{
+  "$defs": {
+    "CapabilityArtifact": {
+      "additionalProperties": false,
+      "description": "File integrity evidence attached to a backend capability probe.",
+      "properties": {
+        "exists": {
+          "title": "Exists",
+          "type": "boolean"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "size_bytes": {
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "exists",
+        "size_bytes"
+      ],
+      "title": "CapabilityArtifact",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/workbench-coupling-capability.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "G7 official PyWorkbench project lifecycle and Mechanical handoff assessment.",
+  "properties": {
+    "archive": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CapabilityArtifact"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "blocker_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Blocker Reason"
+    },
+    "blocker_stage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Blocker Stage"
+    },
+    "coupling_probe_completed": {
+      "title": "Coupling Probe Completed",
+      "type": "boolean"
+    },
+    "evidence": {
+      "additionalProperties": true,
+      "title": "Evidence",
+      "type": "object"
+    },
+    "framework_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Framework Version"
+    },
+    "gate": {
+      "const": "G7",
+      "default": "G7",
+      "title": "Gate",
+      "type": "string"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "lifecycle_complete": {
+      "title": "Lifecycle Complete",
+      "type": "boolean"
+    },
+    "mechanical_server_started": {
+      "title": "Mechanical Server Started",
+      "type": "boolean"
+    },
+    "normal_exit_requested": {
+      "title": "Normal Exit Requested",
+      "type": "boolean"
+    },
+    "owned_cleanup_verified": {
+      "title": "Owned Cleanup Verified",
+      "type": "boolean"
+    },
+    "project": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CapabilityArtifact"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "project_created_saved_reopened": {
+      "title": "Project Created Saved Reopened",
+      "type": "boolean"
+    },
+    "pymechanical_handoff": {
+      "title": "Pymechanical Handoff",
+      "type": "boolean"
+    },
+    "pymechanical_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pymechanical Version"
+    },
+    "pyworkbench_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pyworkbench Version"
+    },
+    "reviewed_script_execution": {
+      "title": "Reviewed Script Execution",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "PASSED",
+        "BLOCKED_ENVIRONMENT",
+        "FAILED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "system_names": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "System Names",
+      "type": "array"
+    },
+    "workbench_coupling": {
+      "title": "Workbench Coupling",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "generated_at",
+    "status",
+    "lifecycle_complete",
+    "reviewed_script_execution",
+    "project_created_saved_reopened",
+    "mechanical_server_started",
+    "pymechanical_handoff",
+    "coupling_probe_completed",
+    "workbench_coupling",
+    "normal_exit_requested",
+    "owned_cleanup_verified"
+  ],
+  "title": "WorkbenchCouplingGateCapabilityReport",
+  "type": "object"
+}

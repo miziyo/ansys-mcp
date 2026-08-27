@@ -1,0 +1,85 @@
+{
+  "$defs": {
+    "ExecutionStatus": {
+      "description": "Execution outcomes kept separate from numerical and physical quality.",
+      "enum": [
+        "SUCCEEDED",
+        "FAILED_LAUNCH",
+        "FAILED_PRECHECK",
+        "FAILED_SOLVER",
+        "FAILED_POSTPROCESS",
+        "BLOCKED_ENVIRONMENT",
+        "CANCELLED"
+      ],
+      "title": "ExecutionStatus",
+      "type": "string"
+    },
+    "RunBundlePhase": {
+      "description": "Monotonic bundle-production phases before the job registry exists.",
+      "enum": [
+        "CREATED",
+        "REQUEST_STAGED",
+        "RESOLVED",
+        "SOLVED",
+        "POSTPROCESSED",
+        "FINALIZED"
+      ],
+      "title": "RunBundlePhase",
+      "type": "string"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/run-bundle-state.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Small atomic state snapshot stored beside the bundle manifest.",
+  "properties": {
+    "detail": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Detail"
+    },
+    "execution_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExecutionStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "phase": {
+      "$ref": "#/$defs/RunBundlePhase"
+    },
+    "run_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "updated_at": {
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "phase",
+    "updated_at"
+  ],
+  "title": "RunBundleState",
+  "type": "object"
+}

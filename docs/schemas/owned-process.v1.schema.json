@@ -1,0 +1,101 @@
+{
+  "$id": "https://ansys-research-runner.local/schemas/owned-process.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact process identity proven to belong to one run.",
+  "properties": {
+    "command_line_fingerprint": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Command Line Fingerprint",
+      "type": "string"
+    },
+    "create_time": {
+      "exclusiveMinimum": 0,
+      "title": "Create Time",
+      "type": "number"
+    },
+    "discovery_method": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Discovery Method",
+      "type": "string"
+    },
+    "ended_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ended At"
+    },
+    "executable_path": {
+      "title": "Executable Path",
+      "type": "string"
+    },
+    "job_id": {
+      "title": "Job Id",
+      "type": "string"
+    },
+    "launcher_pid": {
+      "exclusiveMinimum": 0,
+      "title": "Launcher Pid",
+      "type": "integer"
+    },
+    "parent_pid": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Pid"
+    },
+    "pid": {
+      "exclusiveMinimum": 0,
+      "title": "Pid",
+      "type": "integer"
+    },
+    "registered_at": {
+      "title": "Registered At",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "termination_result": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Termination Result"
+    }
+  },
+  "required": [
+    "job_id",
+    "pid",
+    "create_time",
+    "executable_path",
+    "command_line_fingerprint",
+    "launcher_pid",
+    "discovery_method",
+    "registered_at"
+  ],
+  "title": "OwnedProcessRecord",
+  "type": "object"
+}

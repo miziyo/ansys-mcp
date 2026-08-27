@@ -1,0 +1,41 @@
+schema_version: 1
+model:
+  file: g3_box.step
+  length_unit: mm
+coordinate_frame:
+  type: cad_global
+roles:
+  thermal_domain:
+    entity: body
+    cardinality: exactly_one
+    selector:
+      solid_body: true
+  cold_boundary:
+    entity: face
+    cardinality: exactly_one
+    selector:
+      all:
+        - normal_parallel_to:
+            axis: local_x
+            tolerance_deg: 1
+        - bounding_box_extreme:
+            axis: x
+            side: minimum
+  hot_boundary:
+    entity: face
+    cardinality: exactly_one
+    selector:
+      all:
+        - normal_parallel_to:
+            axis: local_x
+            tolerance_deg: 1
+        - bounding_box_extreme:
+            axis: x
+            side: maximum
+  exterior:
+    entity: face
+    cardinality: one_or_more
+    selector:
+      all:
+        - external_of: thermal_domain
+        - interface: false

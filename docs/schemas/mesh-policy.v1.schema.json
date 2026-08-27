@@ -1,0 +1,63 @@
+{
+  "$defs": {
+    "MeshIntent": {
+      "description": "Supported mesh-density intents.",
+      "enum": [
+        "coarse",
+        "balanced",
+        "fine"
+      ],
+      "title": "MeshIntent",
+      "type": "string"
+    },
+    "MeshIntentPolicy": {
+      "additionalProperties": false,
+      "description": "Versioned characteristic-length divisor for one mesh intent.",
+      "properties": {
+        "diagonal_divisor": {
+          "exclusiveMinimum": 0.0,
+          "title": "Diagonal Divisor",
+          "type": "number"
+        }
+      },
+      "required": [
+        "diagonal_divisor"
+      ],
+      "title": "MeshIntentPolicy",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/mesh-policy.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Versioned table of supported mesh-intent policies.",
+  "properties": {
+    "policies": {
+      "additionalProperties": {
+        "$ref": "#/$defs/MeshIntentPolicy"
+      },
+      "propertyNames": {
+        "$ref": "#/$defs/MeshIntent"
+      },
+      "title": "Policies",
+      "type": "object"
+    },
+    "policy_id": {
+      "const": "thermal_mesh_intent",
+      "default": "thermal_mesh_intent",
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "policies"
+  ],
+  "title": "MeshPolicyDocument",
+  "type": "object"
+}

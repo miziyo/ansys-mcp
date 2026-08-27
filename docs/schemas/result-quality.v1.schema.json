@@ -1,0 +1,169 @@
+{
+  "$defs": {
+    "ExecutionQuality": {
+      "additionalProperties": false,
+      "description": "Execution state independent of correctness checks.",
+      "properties": {
+        "solver_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Solver Message"
+        },
+        "status": {
+          "$ref": "#/$defs/ExecutionStatus"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "ExecutionQuality",
+      "type": "object"
+    },
+    "ExecutionStatus": {
+      "description": "Execution outcomes kept separate from numerical and physical quality.",
+      "enum": [
+        "SUCCEEDED",
+        "FAILED_LAUNCH",
+        "FAILED_PRECHECK",
+        "FAILED_SOLVER",
+        "FAILED_POSTPROCESS",
+        "BLOCKED_ENVIRONMENT",
+        "CANCELLED"
+      ],
+      "title": "ExecutionStatus",
+      "type": "string"
+    },
+    "NumericalQuality": {
+      "additionalProperties": false,
+      "description": "Numerical convergence and discretization verification.",
+      "properties": {
+        "mesh_verification": {
+          "$ref": "#/$defs/VerificationStatus",
+          "default": "NOT_RUN"
+        },
+        "solver_converged": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Solver Converged"
+        },
+        "time_step_verification": {
+          "$ref": "#/$defs/VerificationStatus",
+          "default": "NOT_RUN"
+        }
+      },
+      "title": "NumericalQuality",
+      "type": "object"
+    },
+    "PhysicalQuality": {
+      "additionalProperties": false,
+      "description": "Physical validation dimensions that must remain independently visible.",
+      "properties": {
+        "analytic_reference": {
+          "$ref": "#/$defs/VerificationStatus",
+          "default": "NOT_RUN"
+        },
+        "energy_balance": {
+          "$ref": "#/$defs/VerificationStatus",
+          "default": "NOT_RUN"
+        },
+        "experimental_validation": {
+          "$ref": "#/$defs/VerificationStatus",
+          "default": "NOT_AVAILABLE"
+        }
+      },
+      "title": "PhysicalQuality",
+      "type": "object"
+    },
+    "ProvenanceQuality": {
+      "additionalProperties": false,
+      "description": "Whether the run bundle has a complete provenance manifest.",
+      "properties": {
+        "complete": {
+          "title": "Complete",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "complete"
+      ],
+      "title": "ProvenanceQuality",
+      "type": "object"
+    },
+    "ResultQuality": {
+      "description": "Overall result quality without collapsing independent status dimensions.",
+      "enum": [
+        "NOT_AVAILABLE",
+        "EXECUTION_ONLY",
+        "SOLVER_CONVERGED",
+        "NUMERICALLY_VERIFIED",
+        "PHYSICALLY_VERIFIED",
+        "INVALID"
+      ],
+      "title": "ResultQuality",
+      "type": "string"
+    },
+    "VerificationStatus": {
+      "description": "Allowed status values for independent result checks.",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "NOT_RUN",
+        "NOT_AVAILABLE",
+        "INCONCLUSIVE",
+        "PARTIAL"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/result-quality.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Versioned multidimensional result-quality statement.",
+  "properties": {
+    "execution": {
+      "$ref": "#/$defs/ExecutionQuality"
+    },
+    "numerical": {
+      "$ref": "#/$defs/NumericalQuality"
+    },
+    "physical": {
+      "$ref": "#/$defs/PhysicalQuality"
+    },
+    "provenance": {
+      "$ref": "#/$defs/ProvenanceQuality"
+    },
+    "result_quality": {
+      "$ref": "#/$defs/ResultQuality"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "execution",
+    "numerical",
+    "physical",
+    "provenance",
+    "result_quality"
+  ],
+  "title": "ResultQualitySummary",
+  "type": "object"
+}

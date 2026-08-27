@@ -1,0 +1,42 @@
+{
+  "$id": "https://ansys-research-runner.local/schemas/resource-snapshot.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Best-effort resource observation for owned processes and their workdir.",
+  "properties": {
+    "cpu_time_s": {
+      "minimum": 0,
+      "title": "Cpu Time S",
+      "type": "number"
+    },
+    "observed_processes": {
+      "minimum": 0,
+      "title": "Observed Processes",
+      "type": "integer"
+    },
+    "rss_bytes": {
+      "minimum": 0,
+      "title": "Rss Bytes",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "workdir_bytes": {
+      "minimum": 0,
+      "title": "Workdir Bytes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "rss_bytes",
+    "cpu_time_s",
+    "workdir_bytes",
+    "observed_processes"
+  ],
+  "title": "ResourceSnapshot",
+  "type": "object"
+}

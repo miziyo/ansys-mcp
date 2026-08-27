@@ -1,0 +1,19 @@
+{
+  "assets": [
+    {
+      "file": "g3_box.step",
+      "generator": "g3_box.py",
+      "generator_sha256": "5a52806a31257d1918facca70c787fccea9a4a8d6859f9cec0fbf626db50f76c",
+      "sha256": "5808c3148b556b8e8ddd296fad71122103e2d2af4db9c4d68474a15be26e0e20"
+    },
+    {
+      "file": "g3_cylinder.step",
+      "generator": "g3_cylinder.py",
+      "generator_sha256": "b5f8f04204e426131901767b0a02ab1c2a0fd76bd7639383c7ab7619123ba787",
+      "sha256": "666a5e0307735683a4df868ea8c76c5c78950ff0d3384a55019051e5cb6b0e0e"
+    }
+  ],
+  "license": "MIT",
+  "provenance": "Project-owned parametric geometry generated from the adjacent Python sources",
+  "schema_version": 1
+}

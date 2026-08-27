@@ -1,0 +1,31 @@
+schema_version: 1
+blueprint:
+  id: solid_steady_thermal
+  version: 1
+supported_geometry:
+  dimensions: [3d]
+  body_types: [solid]
+  minimum_bodies: 1
+roles:
+  required:
+    - thermal_domain
+  optional:
+    - heat_source_domain
+    - prescribed_temperature_boundary
+    - convection_boundary
+    - heat_flux_boundary
+    - sensor_region
+materials:
+  required:
+    - thermal_conductivity
+  optional:
+    - density
+    - specific_heat
+outputs:
+  supported:
+    - global_temperature_extrema
+    - body_average_temperature
+    - region_average_temperature
+    - coordinate_probe
+    - hotspot_location
+    - temperature_field

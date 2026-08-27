@@ -1,0 +1,1 @@
+"""Isolated capability probe adapters."""

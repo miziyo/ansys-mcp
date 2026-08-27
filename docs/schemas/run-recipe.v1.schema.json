@@ -1,0 +1,891 @@
+{
+  "$defs": {
+    "AbsoluteTemperature": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "AnalysisSettings": {
+      "additionalProperties": false,
+      "description": "Steady or transient time controls.",
+      "properties": {
+        "end_time": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Duration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "initial_temperature": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AbsoluteTemperature"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "time_step": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Duration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "type": {
+          "default": "steady",
+          "enum": [
+            "steady",
+            "transient"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "AnalysisSettings",
+      "type": "object"
+    },
+    "BlueprintReference": {
+      "additionalProperties": false,
+      "description": "Reference to a versioned Blueprint, accepting ``name@version`` input.",
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "title": "BlueprintReference",
+      "type": "object"
+    },
+    "BodyAverageTemperatureOutput": {
+      "additionalProperties": false,
+      "description": "Request average temperature for a body role.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "body_average_temperature",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region"
+      ],
+      "title": "BodyAverageTemperatureOutput",
+      "type": "object"
+    },
+    "BoundaryCondition": {
+      "discriminator": {
+        "mapping": {
+          "convection": "#/$defs/ConvectionBoundary",
+          "heat_flux": "#/$defs/HeatFluxBoundary",
+          "temperature": "#/$defs/TemperatureBoundary",
+          "total_heat": "#/$defs/TotalHeatBoundary",
+          "volumetric_heat_generation": "#/$defs/VolumetricHeatLoad",
+          "volumetric_heat_generation_profile": "#/$defs/TimeSeriesVolumetricHeatLoad"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TemperatureBoundary"
+        },
+        {
+          "$ref": "#/$defs/ConvectionBoundary"
+        },
+        {
+          "$ref": "#/$defs/HeatFluxBoundary"
+        },
+        {
+          "$ref": "#/$defs/TotalHeatBoundary"
+        },
+        {
+          "$ref": "#/$defs/VolumetricHeatLoad"
+        },
+        {
+          "$ref": "#/$defs/TimeSeriesVolumetricHeatLoad"
+        }
+      ]
+    },
+    "ConvectionBoundary": {
+      "additionalProperties": false,
+      "description": "Convection film condition.",
+      "properties": {
+        "ambient_temperature": {
+          "$ref": "#/$defs/AbsoluteTemperature"
+        },
+        "film_coefficient": {
+          "$ref": "#/$defs/HeatTransferCoefficient"
+        },
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "convection",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "film_coefficient",
+        "ambient_temperature"
+      ],
+      "title": "ConvectionBoundary",
+      "type": "object"
+    },
+    "CoordinateProbeOutput": {
+      "additionalProperties": false,
+      "description": "Request interpolated temperature at a coordinate.",
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "point": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "point_unit": {
+          "$ref": "#/$defs/PointUnit"
+        },
+        "type": {
+          "const": "coordinate_probe",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "point",
+        "point_unit"
+      ],
+      "title": "CoordinateProbeOutput",
+      "type": "object"
+    },
+    "Density": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "Duration": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "GlobalTemperatureExtremaOutput": {
+      "additionalProperties": false,
+      "description": "Request global minimum and maximum temperature.",
+      "properties": {
+        "type": {
+          "const": "global_temperature_extrema",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "GlobalTemperatureExtremaOutput",
+      "type": "object"
+    },
+    "HeatFlux": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "HeatFluxBoundary": {
+      "additionalProperties": false,
+      "description": "Surface heat-flux condition.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "heat_flux",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/HeatFlux"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "HeatFluxBoundary",
+      "type": "object"
+    },
+    "HeatTransferCoefficient": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "HotspotLocationOutput": {
+      "additionalProperties": false,
+      "description": "Request the hottest reported location.",
+      "properties": {
+        "type": {
+          "const": "hotspot_location",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "HotspotLocationOutput",
+      "type": "object"
+    },
+    "Length": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "LocalMeshOverride": {
+      "additionalProperties": false,
+      "description": "Optional local characteristic length for a semantic region.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "size": {
+          "$ref": "#/$defs/Length"
+        }
+      },
+      "required": [
+        "region",
+        "size"
+      ],
+      "title": "LocalMeshOverride",
+      "type": "object"
+    },
+    "MaterialAssignment": {
+      "additionalProperties": false,
+      "description": "Thermal material properties assigned to one semantic body role.",
+      "properties": {
+        "density": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Density"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "specific_heat": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpecificHeat"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "thermal_conductivity": {
+          "$ref": "#/$defs/ThermalConductivity"
+        }
+      },
+      "required": [
+        "thermal_conductivity"
+      ],
+      "title": "MaterialAssignment",
+      "type": "object"
+    },
+    "MeshIntent": {
+      "description": "Supported mesh-density intents.",
+      "enum": [
+        "coarse",
+        "balanced",
+        "fine"
+      ],
+      "title": "MeshIntent",
+      "type": "string"
+    },
+    "MeshRequest": {
+      "additionalProperties": false,
+      "description": "Bounded v0.x mesh intent and optional resource constraints.",
+      "properties": {
+        "intent": {
+          "$ref": "#/$defs/MeshIntent",
+          "default": "balanced"
+        },
+        "local_region_overrides": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LocalMeshOverride"
+          },
+          "title": "Local Region Overrides",
+          "type": "array"
+        },
+        "maximum_elements": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Elements"
+        },
+        "maximum_size": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "minimum_size": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "MeshRequest",
+      "type": "object"
+    },
+    "MeshVerificationRequest": {
+      "additionalProperties": false,
+      "description": "Practical convergence criterion for an explicit three-profile mesh study.",
+      "properties": {
+        "absolute_tolerance_K": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Absolute Tolerance K"
+        },
+        "profiles": {
+          "default": [
+            "coarse",
+            "balanced",
+            "fine"
+          ],
+          "items": {
+            "$ref": "#/$defs/MeshIntent"
+          },
+          "title": "Profiles",
+          "type": "array"
+        },
+        "relative_tolerance": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Tolerance"
+        },
+        "target_metric": {
+          "default": "volume_average_temperature_K",
+          "enum": [
+            "minimum_temperature_K",
+            "maximum_temperature_K",
+            "volume_average_temperature_K"
+          ],
+          "title": "Target Metric",
+          "type": "string"
+        }
+      },
+      "title": "MeshVerificationRequest",
+      "type": "object"
+    },
+    "PhysicalDimension": {
+      "description": "Supported physical dimensions in v0.x contracts.",
+      "enum": [
+        "length",
+        "area",
+        "volume",
+        "time",
+        "absolute_temperature",
+        "temperature_difference",
+        "thermal_conductivity",
+        "density",
+        "specific_heat",
+        "heat_transfer_coefficient",
+        "heat_flux",
+        "volumetric_heat_generation",
+        "power"
+      ],
+      "title": "PhysicalDimension",
+      "type": "string"
+    },
+    "PhysicalQuantity": {
+      "additionalProperties": false,
+      "description": "Original user quantity paired with a finite SI-normalized value.",
+      "properties": {
+        "dimension": {
+          "$ref": "#/$defs/PhysicalDimension"
+        },
+        "original": {
+          "minLength": 1,
+          "title": "Original",
+          "type": "string"
+        },
+        "si_unit": {
+          "minLength": 1,
+          "title": "Si Unit",
+          "type": "string"
+        },
+        "si_value": {
+          "title": "Si Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "original",
+        "si_value",
+        "si_unit",
+        "dimension"
+      ],
+      "title": "PhysicalQuantity",
+      "type": "object"
+    },
+    "PointUnit": {
+      "description": "Supported coordinate-probe point conventions.",
+      "enum": [
+        "model_length_unit",
+        "normalized_model_coordinates"
+      ],
+      "title": "PointUnit",
+      "type": "string"
+    },
+    "Power": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "RegionAverageTemperatureOutput": {
+      "additionalProperties": false,
+      "description": "Request average temperature for any semantic region.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "region_average_temperature",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region"
+      ],
+      "title": "RegionAverageTemperatureOutput",
+      "type": "object"
+    },
+    "RequestedOutput": {
+      "discriminator": {
+        "mapping": {
+          "body_average_temperature": "#/$defs/BodyAverageTemperatureOutput",
+          "coordinate_probe": "#/$defs/CoordinateProbeOutput",
+          "global_temperature_extrema": "#/$defs/GlobalTemperatureExtremaOutput",
+          "hotspot_location": "#/$defs/HotspotLocationOutput",
+          "region_average_temperature": "#/$defs/RegionAverageTemperatureOutput",
+          "temperature_field": "#/$defs/TemperatureFieldOutput"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/GlobalTemperatureExtremaOutput"
+        },
+        {
+          "$ref": "#/$defs/BodyAverageTemperatureOutput"
+        },
+        {
+          "$ref": "#/$defs/RegionAverageTemperatureOutput"
+        },
+        {
+          "$ref": "#/$defs/CoordinateProbeOutput"
+        },
+        {
+          "$ref": "#/$defs/HotspotLocationOutput"
+        },
+        {
+          "$ref": "#/$defs/TemperatureFieldOutput"
+        }
+      ]
+    },
+    "RunIdentity": {
+      "additionalProperties": false,
+      "description": "Identity and immutable input references for one requested run.",
+      "properties": {
+        "blueprint": {
+          "$ref": "#/$defs/BlueprintReference"
+        },
+        "case_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "model_manifest": {
+          "minLength": 1,
+          "title": "Model Manifest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_id",
+        "blueprint",
+        "model_manifest"
+      ],
+      "title": "RunIdentity",
+      "type": "object"
+    },
+    "SpecificHeat": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "TemperatureBoundary": {
+      "additionalProperties": false,
+      "description": "Prescribed absolute temperature.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "temperature",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/AbsoluteTemperature"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "TemperatureBoundary",
+      "type": "object"
+    },
+    "TemperatureFieldOutput": {
+      "additionalProperties": false,
+      "description": "Request a persisted temperature field artifact.",
+      "properties": {
+        "times": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Duration"
+          },
+          "title": "Times",
+          "type": "array"
+        },
+        "type": {
+          "const": "temperature_field",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "TemperatureFieldOutput",
+      "type": "object"
+    },
+    "ThermalConductivity": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "TimeSeriesVolumetricHeatLoad": {
+      "additionalProperties": false,
+      "description": "Volumetric heat generation read from a bounded two-column CSV profile.",
+      "properties": {
+        "profile_file": {
+          "minLength": 1,
+          "title": "Profile File",
+          "type": "string"
+        },
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "volumetric_heat_generation_profile",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "profile_file"
+      ],
+      "title": "TimeSeriesVolumetricHeatLoad",
+      "type": "object"
+    },
+    "TotalHeatBoundary": {
+      "additionalProperties": false,
+      "description": "Total heat applied to a semantic region.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "total_heat",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/Power"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "TotalHeatBoundary",
+      "type": "object"
+    },
+    "Vector3": {
+      "description": "Finite three-dimensional vector serialized as a JSON array.",
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Vector3",
+      "type": "array"
+    },
+    "VolumetricHeatGeneration": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "VolumetricHeatLoad": {
+      "additionalProperties": false,
+      "description": "Uniform volumetric heat generation in a body role.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "volumetric_heat_generation",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/VolumetricHeatGeneration"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "VolumetricHeatLoad",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/run-recipe.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Per-run values compiled with a Blueprint and Model Manifest.",
+  "properties": {
+    "analysis": {
+      "$ref": "#/$defs/AnalysisSettings",
+      "default": {
+        "end_time": null,
+        "initial_temperature": null,
+        "time_step": null,
+        "type": "steady"
+      }
+    },
+    "boundary_conditions": {
+      "items": {
+        "$ref": "#/$defs/BoundaryCondition"
+      },
+      "title": "Boundary Conditions",
+      "type": "array"
+    },
+    "materials": {
+      "additionalProperties": {
+        "$ref": "#/$defs/MaterialAssignment"
+      },
+      "minProperties": 1,
+      "title": "Materials",
+      "type": "object"
+    },
+    "mesh": {
+      "$ref": "#/$defs/MeshRequest",
+      "default": {
+        "intent": "balanced",
+        "local_region_overrides": [],
+        "maximum_elements": null,
+        "maximum_size": null,
+        "minimum_size": null
+      }
+    },
+    "mesh_verification": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MeshVerificationRequest"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "outputs": {
+      "items": {
+        "$ref": "#/$defs/RequestedOutput"
+      },
+      "minItems": 1,
+      "title": "Outputs",
+      "type": "array"
+    },
+    "run": {
+      "$ref": "#/$defs/RunIdentity"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "run",
+    "materials",
+    "boundary_conditions",
+    "outputs"
+  ],
+  "title": "RunRecipe",
+  "type": "object"
+}

@@ -1,0 +1,201 @@
+{
+  "$defs": {
+    "BlueprintIdentity": {
+      "additionalProperties": false,
+      "description": "Stable Blueprint name and major contract version.",
+      "properties": {
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "title": "BlueprintIdentity",
+      "type": "object"
+    },
+    "EntityType": {
+      "description": "Geometry entity types exposed by the graph.",
+      "enum": [
+        "solid"
+      ],
+      "title": "EntityType",
+      "type": "string"
+    },
+    "MaterialCatalog": {
+      "additionalProperties": false,
+      "description": "Required and optional material inputs.",
+      "properties": {
+        "optional": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/MaterialProperty"
+          },
+          "title": "Optional",
+          "type": "array"
+        },
+        "required": {
+          "items": {
+            "$ref": "#/$defs/MaterialProperty"
+          },
+          "minItems": 1,
+          "title": "Required",
+          "type": "array"
+        }
+      },
+      "required": [
+        "required"
+      ],
+      "title": "MaterialCatalog",
+      "type": "object"
+    },
+    "MaterialProperty": {
+      "description": "Material properties understood by supported thermal Blueprints.",
+      "enum": [
+        "thermal_conductivity",
+        "density",
+        "specific_heat"
+      ],
+      "title": "MaterialProperty",
+      "type": "string"
+    },
+    "OutputCapability": {
+      "description": "Output types understood by supported thermal Blueprints.",
+      "enum": [
+        "global_temperature_extrema",
+        "body_average_temperature",
+        "region_average_temperature",
+        "coordinate_probe",
+        "hotspot_location",
+        "temperature_field"
+      ],
+      "title": "OutputCapability",
+      "type": "string"
+    },
+    "OutputCatalog": {
+      "additionalProperties": false,
+      "description": "Outputs supported by a Blueprint.",
+      "properties": {
+        "supported": {
+          "items": {
+            "$ref": "#/$defs/OutputCapability"
+          },
+          "minItems": 1,
+          "title": "Supported",
+          "type": "array"
+        }
+      },
+      "required": [
+        "supported"
+      ],
+      "title": "OutputCatalog",
+      "type": "object"
+    },
+    "RoleCatalog": {
+      "additionalProperties": false,
+      "description": "Required and optional semantic role names.",
+      "properties": {
+        "optional": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Optional",
+          "type": "array"
+        },
+        "required": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required",
+          "type": "array"
+        }
+      },
+      "required": [
+        "required"
+      ],
+      "title": "RoleCatalog",
+      "type": "object"
+    },
+    "SupportedGeometry": {
+      "additionalProperties": false,
+      "description": "Geometry envelope accepted by a Blueprint.",
+      "properties": {
+        "body_types": {
+          "default": [
+            "solid"
+          ],
+          "items": {
+            "$ref": "#/$defs/EntityType"
+          },
+          "title": "Body Types",
+          "type": "array"
+        },
+        "dimensions": {
+          "default": [
+            "3d"
+          ],
+          "items": {
+            "const": "3d",
+            "type": "string"
+          },
+          "title": "Dimensions",
+          "type": "array"
+        },
+        "minimum_bodies": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Minimum Bodies",
+          "type": "integer"
+        }
+      },
+      "title": "SupportedGeometry",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/analysis-blueprint.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "CAD-independent definition of one supported thermal analysis contract.",
+  "properties": {
+    "blueprint": {
+      "$ref": "#/$defs/BlueprintIdentity"
+    },
+    "materials": {
+      "$ref": "#/$defs/MaterialCatalog"
+    },
+    "outputs": {
+      "$ref": "#/$defs/OutputCatalog"
+    },
+    "roles": {
+      "$ref": "#/$defs/RoleCatalog"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "supported_geometry": {
+      "$ref": "#/$defs/SupportedGeometry"
+    }
+  },
+  "required": [
+    "blueprint",
+    "supported_geometry",
+    "roles",
+    "materials",
+    "outputs"
+  ],
+  "title": "AnalysisBlueprint",
+  "type": "object"
+}

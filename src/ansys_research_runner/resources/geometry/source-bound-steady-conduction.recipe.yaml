@@ -1,0 +1,25 @@
+schema_version: 1
+run:
+  case_id: source_bound_step_box
+  blueprint: solid_steady_thermal@1
+  model_manifest: source-bound-step-box.manifest.yaml
+materials:
+  thermal_domain:
+    thermal_conductivity: 15 W/m/K
+boundary_conditions:
+  - type: temperature
+    region: cold_boundary
+    value: 20 degC
+  - type: temperature
+    region: hot_boundary
+    value: 100 degC
+mesh:
+  intent: balanced
+  maximum_elements: 300000
+outputs:
+  - type: global_temperature_extrema
+  - type: coordinate_probe
+    name: center
+    point: [0.5, 0.5, 0.5]
+    point_unit: normalized_model_coordinates
+  - type: temperature_field

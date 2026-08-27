@@ -1,0 +1,62 @@
+{
+  "$defs": {
+    "HeatGenerationPoint": {
+      "additionalProperties": false,
+      "description": "One SI-normalized heat-generation profile sample.",
+      "properties": {
+        "heat_generation_W_m3": {
+          "title": "Heat Generation W M3",
+          "type": "number"
+        },
+        "time_s": {
+          "minimum": 0.0,
+          "title": "Time S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "time_s",
+        "heat_generation_W_m3"
+      ],
+      "title": "HeatGenerationPoint",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/transient-profile.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable CSV content and identity embedded in solver-bound CAE-IR.",
+  "properties": {
+    "points": {
+      "items": {
+        "$ref": "#/$defs/HeatGenerationPoint"
+      },
+      "minItems": 2,
+      "title": "Points",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_file": {
+      "minLength": 1,
+      "title": "Source File",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_file",
+    "source_sha256",
+    "points"
+  ],
+  "title": "ResolvedHeatGenerationProfile",
+  "type": "object"
+}

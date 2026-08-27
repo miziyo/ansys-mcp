@@ -1,0 +1,32 @@
+{
+  "name": "ansys-research-runner-pi",
+  "version": "0.13.0",
+  "private": true,
+  "type": "module",
+  "description": "Pi extension bridge for the closed ansys-research-runner MCP server",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "ansys",
+    "mcp"
+  ],
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "pi": {
+    "extensions": [
+      "./integrations/pi/index.ts"
+    ]
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.13",
+    "typescript": "5.9.3"
+  }
+}

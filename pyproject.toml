@@ -1,0 +1,122 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ansys-research-runner"
+version = "0.13.0"
+description = "A closed, solver-neutral thermal research runner for local Ansys installations."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+requires-python = ">=3.12,<3.13"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "ansys-common-mcp>=0.3.3,<0.4",
+    "ansys-dpf-core>=0.16.1",
+    "ansys-geometry-core>=0.17.1",
+    "ansys-mechanical-core>=0.13.2",
+    "ansys-meshing-prime>=0.10,<0.11",
+    "ansys-workbench-core>=0.14.0",
+    "fastmcp>=3.4,<4",
+    "h5py>=3.15,<4",
+    "mcp>=1.29,<2",
+    "numpy>=2.3,<3",
+    "pint>=0.25,<1",
+    "platformdirs>=4.4,<5",
+    "portalocker>=3.2,<4",
+    "psutil>=7.2,<8",
+    "pydantic>=2.12,<3",
+    "PyYAML>=6.0,<7",
+    "typer>=0.21,<1",
+]
+
+[project.urls]
+Repository = "https://github.com/miziyo/ansys-mcp"
+Issues = "https://github.com/miziyo/ansys-mcp/issues"
+
+[project.scripts]
+ansys-research = "ansys_research_runner.cli:entrypoint"
+ansys-research-mcp = "ansys_research_runner.mcp_server:entrypoint"
+ansys-research-worker = "ansys_research_runner.adapters.worker.queue_dispatcher:main"
+
+[tool.hatch.build]
+exclude = [
+    "/.build-check",
+    "/.cache",
+    "/.dev-venv",
+    "/.hypothesis",
+    "/.isolated",
+    "/.mypy_cache",
+    "/.pytest_cache",
+    "/.python",
+    "/.ruff_cache",
+    "/.tmp",
+    "/.venv*",
+    "/artifacts",
+    "/dist",
+    "/runtime",
+    "/workspace",
+    "/*.log",
+    "/*.trn",
+]
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "/docs",
+    "/scripts",
+    "/src",
+    "/tests",
+    "/.env.example",
+    "/.gitattributes",
+    "/.gitignore",
+    "/.python-version",
+    "/CHANGELOG.md",
+    "/CONTRIBUTING.md",
+    "/LICENSE",
+    "/README.md",
+    "/SECURITY.md",
+    "/THIRD_PARTY_NOTICES.md",
+    "/pyproject.toml",
+    "/uv.lock",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ansys_research_runner"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/property", "tests/contract", "tests/integration", "tests/fault_injection"]
+addopts = "-ra --strict-markers"
+markers = [
+    "ansys_live: requires a real local Ansys product process and license",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["ansys_research_runner"]
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.150,<7",
+    "mypy>=1.19,<2",
+    "pytest>=9.0,<10",
+    "pytest-cov>=7.0,<8",
+    "pytest-timeout>=2.4,<3",
+    "pytest-xdist>=3.8,<4",
+    "ruff>=0.14,<1",
+    "types-psutil>=7.2.2.20260518",
+    "types-PyYAML>=6.0,<7",
+]

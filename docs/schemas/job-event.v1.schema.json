@@ -1,0 +1,109 @@
+{
+  "$defs": {
+    "JobStatus": {
+      "description": "Closed state set for durable run orchestration.",
+      "enum": [
+        "QUEUED",
+        "VALIDATING",
+        "STAGING",
+        "WAITING_RESOURCE",
+        "LAUNCHING",
+        "PRECHECKING",
+        "SOLVING",
+        "POSTPROCESSING",
+        "EXPORTING",
+        "SUCCEEDED",
+        "FAILED_INPUT",
+        "FAILED_LAUNCH",
+        "FAILED_LICENSE",
+        "FAILED_PRECHECK",
+        "FAILED_SOLVER",
+        "FAILED_RESOURCE",
+        "FAILED_POSTPROCESS",
+        "FAILED_EXPORT",
+        "CANCEL_REQUESTED",
+        "CANCELLED",
+        "RECOVERY_REQUIRED"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/job-event.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One immutable state transition or operational audit event.",
+  "properties": {
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "details": {
+      "additionalProperties": true,
+      "title": "Details",
+      "type": "object"
+    },
+    "event_id": {
+      "minimum": 1,
+      "title": "Event Id",
+      "type": "integer"
+    },
+    "event_type": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Event Type",
+      "type": "string"
+    },
+    "from_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JobStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "job_id": {
+      "title": "Job Id",
+      "type": "string"
+    },
+    "message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Message"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sequence": {
+      "minimum": 1,
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "to_status": {
+      "$ref": "#/$defs/JobStatus"
+    }
+  },
+  "required": [
+    "event_id",
+    "job_id",
+    "sequence",
+    "to_status",
+    "event_type",
+    "created_at"
+  ],
+  "title": "JobEvent",
+  "type": "object"
+}

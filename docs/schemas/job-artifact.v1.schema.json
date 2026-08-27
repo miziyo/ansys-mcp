@@ -1,0 +1,60 @@
+{
+  "$id": "https://ansys-research-runner.local/schemas/job-artifact.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable integrity metadata for one job artifact.",
+  "properties": {
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "job_id": {
+      "title": "Job Id",
+      "type": "string"
+    },
+    "kind": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "media_type": {
+      "maxLength": 255,
+      "minLength": 1,
+      "title": "Media Type",
+      "type": "string"
+    },
+    "path": {
+      "minLength": 1,
+      "title": "Path",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "size_bytes": {
+      "minimum": 0,
+      "title": "Size Bytes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "job_id",
+    "path",
+    "kind",
+    "media_type",
+    "size_bytes",
+    "sha256",
+    "created_at"
+  ],
+  "title": "JobArtifactRecord",
+  "type": "object"
+}

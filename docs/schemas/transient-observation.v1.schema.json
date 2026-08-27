@@ -1,0 +1,218 @@
+{
+  "$defs": {
+    "HotspotSummary": {
+      "additionalProperties": false,
+      "description": "Hottest reported location and value.",
+      "properties": {
+        "position_m": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "value_K": {
+          "title": "Value K",
+          "type": "number"
+        }
+      },
+      "required": [
+        "position_m",
+        "value_K"
+      ],
+      "title": "HotspotSummary",
+      "type": "object"
+    },
+    "ProbeInterpolationStatus": {
+      "description": "Coordinate probe mapping outcome.",
+      "enum": [
+        "INTERPOLATED",
+        "OUTSIDE_MESH",
+        "FAILED"
+      ],
+      "title": "ProbeInterpolationStatus",
+      "type": "string"
+    },
+    "ProbeResult": {
+      "additionalProperties": false,
+      "description": "One coordinate probe with explicit mesh-mapping evidence.",
+      "properties": {
+        "coordinate_system": {
+          "minLength": 1,
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "inside_mesh": {
+          "title": "Inside Mesh",
+          "type": "boolean"
+        },
+        "interpolation_status": {
+          "$ref": "#/$defs/ProbeInterpolationStatus"
+        },
+        "mapped_position_m": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "requested_position_m": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "value_K": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value K"
+        }
+      },
+      "required": [
+        "name",
+        "requested_position_m",
+        "coordinate_system",
+        "inside_mesh",
+        "interpolation_status"
+      ],
+      "title": "ProbeResult",
+      "type": "object"
+    },
+    "ScalarResultSummary": {
+      "additionalProperties": false,
+      "description": "Versioned common scalar result payload.",
+      "properties": {
+        "hotspot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HotspotSummary"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "temperature": {
+          "$ref": "#/$defs/TemperatureSummary"
+        }
+      },
+      "required": [
+        "temperature"
+      ],
+      "title": "ScalarResultSummary",
+      "type": "object"
+    },
+    "TemperatureSummary": {
+      "additionalProperties": false,
+      "description": "Finite scalar temperature summary in kelvin.",
+      "properties": {
+        "maximum_K": {
+          "title": "Maximum K",
+          "type": "number"
+        },
+        "minimum_K": {
+          "title": "Minimum K",
+          "type": "number"
+        },
+        "volume_average_K": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Volume Average K"
+        }
+      },
+      "required": [
+        "minimum_K",
+        "maximum_K"
+      ],
+      "title": "TemperatureSummary",
+      "type": "object"
+    },
+    "Vector3": {
+      "description": "Finite three-dimensional vector serialized as a JSON array.",
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Vector3",
+      "type": "array"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/transient-observation.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Solver-derived transient volume-average temperature history.",
+  "properties": {
+    "analysis_type": {
+      "const": "transient",
+      "default": "transient",
+      "title": "Analysis Type",
+      "type": "string"
+    },
+    "probes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ProbeResult"
+      },
+      "title": "Probes",
+      "type": "array"
+    },
+    "summary": {
+      "$ref": "#/$defs/ScalarResultSummary"
+    },
+    "times_s": {
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1,
+      "title": "Times S",
+      "type": "array"
+    },
+    "volume_average_temperature_K": {
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1,
+      "title": "Volume Average Temperature K",
+      "type": "array"
+    }
+  },
+  "required": [
+    "summary",
+    "times_s",
+    "volume_average_temperature_K"
+  ],
+  "title": "TransientThermalObservation",
+  "type": "object"
+}

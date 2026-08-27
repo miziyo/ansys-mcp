@@ -1,0 +1,221 @@
+{
+  "$defs": {
+    "EntityKind": {
+      "description": "Entity class selected by a semantic role.",
+      "enum": [
+        "body",
+        "face"
+      ],
+      "title": "EntityKind",
+      "type": "string"
+    },
+    "ErrorCode": {
+      "description": "Stable error codes exposed by validation and resolution services.",
+      "enum": [
+        "UNIT_REQUIRED",
+        "UNIT_DIMENSION_MISMATCH",
+        "UNIT_NORMALIZATION_MISMATCH",
+        "TEMPERATURE_KIND_MISMATCH",
+        "INVALID_COORDINATE_FRAME",
+        "AMBIGUOUS_COORDINATE_FRAME",
+        "INVALID_SELECTOR",
+        "UNSUPPORTED_SELECTOR_CAPABILITY",
+        "UNRESOLVED_ROLE",
+        "AMBIGUOUS_ROLE",
+        "INVALID_CARDINALITY",
+        "ROLE_DEPENDENCY_CYCLE",
+        "UNKNOWN_ROLE",
+        "PREFLIGHT_VALIDATION_FAILED",
+        "GEOMETRY_CAPABILITY_MISSING",
+        "SOLVER_CAPABILITY_MISSING",
+        "SOURCE_MODEL_MISMATCH",
+        "PATH_OUTSIDE_ROOT",
+        "PATH_TRAVERSAL",
+        "SYMLINK_ESCAPE",
+        "FILE_NOT_FOUND",
+        "UNSUPPORTED_EXTENSION",
+        "YAML_TOO_LARGE",
+        "YAML_UNSAFE",
+        "CONTRACT_INVALID",
+        "ARBITRARY_SCRIPT_FIELD",
+        "JOB_NOT_FOUND",
+        "JOB_CONFLICT",
+        "JOB_STATE_INVALID",
+        "CAPABILITY_UNAVAILABLE",
+        "INTERNAL_ERROR"
+      ],
+      "title": "ErrorCode",
+      "type": "string"
+    },
+    "ResolutionError": {
+      "additionalProperties": false,
+      "description": "Structured resolution error embedded in a report.",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "message"
+      ],
+      "title": "ResolutionError",
+      "type": "object"
+    },
+    "ResolutionStatus": {
+      "description": "Outcome of resolving a semantic role.",
+      "enum": [
+        "resolved",
+        "unresolved",
+        "ambiguous",
+        "unsupported"
+      ],
+      "title": "ResolutionStatus",
+      "type": "string"
+    },
+    "RoleResolution": {
+      "additionalProperties": false,
+      "description": "Deterministic resolution result for one role.",
+      "properties": {
+        "candidate_keys": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Candidate Keys",
+          "type": "array"
+        },
+        "confidence": {
+          "default": "deterministic",
+          "title": "Confidence",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResolutionError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SelectionEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "selected_count": {
+          "title": "Selected Count",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ResolutionStatus"
+        }
+      },
+      "required": [
+        "role",
+        "status",
+        "selected_count"
+      ],
+      "title": "RoleResolution",
+      "type": "object"
+    },
+    "SelectionEvidence": {
+      "additionalProperties": false,
+      "description": "Why one run-local entity was selected for a semantic role.",
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/EntityKind"
+        },
+        "geometry_fingerprint": {
+          "title": "Geometry Fingerprint",
+          "type": "string"
+        },
+        "internal_runtime_id": {
+          "title": "Internal Runtime Id",
+          "type": "string"
+        },
+        "measurements": {
+          "additionalProperties": true,
+          "title": "Measurements",
+          "type": "object"
+        },
+        "selector": {
+          "additionalProperties": true,
+          "title": "Selector",
+          "type": "object"
+        },
+        "semantic_role": {
+          "title": "Semantic Role",
+          "type": "string"
+        },
+        "stable_key": {
+          "title": "Stable Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "semantic_role",
+        "stable_key",
+        "internal_runtime_id",
+        "entity",
+        "selector",
+        "geometry_fingerprint",
+        "measurements"
+      ],
+      "title": "SelectionEvidence",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/region-resolution.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Resolution of all manifest roles against one geometry graph.",
+  "properties": {
+    "geometry_fingerprint": {
+      "title": "Geometry Fingerprint",
+      "type": "string"
+    },
+    "roles": {
+      "additionalProperties": {
+        "$ref": "#/$defs/RoleResolution"
+      },
+      "title": "Roles",
+      "type": "object"
+    },
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "geometry_fingerprint",
+    "roles"
+  ],
+  "title": "RegionResolution",
+  "type": "object"
+}

@@ -1,0 +1,177 @@
+{
+  "$defs": {
+    "JobStatus": {
+      "description": "Closed state set for durable run orchestration.",
+      "enum": [
+        "QUEUED",
+        "VALIDATING",
+        "STAGING",
+        "WAITING_RESOURCE",
+        "LAUNCHING",
+        "PRECHECKING",
+        "SOLVING",
+        "POSTPROCESSING",
+        "EXPORTING",
+        "SUCCEEDED",
+        "FAILED_INPUT",
+        "FAILED_LAUNCH",
+        "FAILED_LICENSE",
+        "FAILED_PRECHECK",
+        "FAILED_SOLVER",
+        "FAILED_RESOURCE",
+        "FAILED_POSTPROCESS",
+        "FAILED_EXPORT",
+        "CANCEL_REQUESTED",
+        "CANCELLED",
+        "RECOVERY_REQUIRED"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/job-record.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Current durable snapshot for one job.",
+  "properties": {
+    "attempt": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Code"
+    },
+    "error_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Message"
+    },
+    "heartbeat_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Heartbeat At"
+    },
+    "heartbeat_timeout_s": {
+      "default": 30.0,
+      "exclusiveMinimum": 0,
+      "title": "Heartbeat Timeout S",
+      "type": "number"
+    },
+    "job_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+      "title": "Job Id",
+      "type": "string"
+    },
+    "kind": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "launch_timeout_s": {
+      "default": 30.0,
+      "exclusiveMinimum": 0,
+      "title": "Launch Timeout S",
+      "type": "number"
+    },
+    "lease_expires_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lease Expires At"
+    },
+    "request": {
+      "additionalProperties": true,
+      "title": "Request",
+      "type": "object"
+    },
+    "result": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Result"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/JobStatus"
+    },
+    "updated_at": {
+      "title": "Updated At",
+      "type": "string"
+    },
+    "wall_clock_timeout_s": {
+      "default": 3600.0,
+      "exclusiveMinimum": 0,
+      "title": "Wall Clock Timeout S",
+      "type": "number"
+    },
+    "worker_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Worker Id"
+    }
+  },
+  "required": [
+    "job_id",
+    "kind",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "JobRecord",
+  "type": "object"
+}

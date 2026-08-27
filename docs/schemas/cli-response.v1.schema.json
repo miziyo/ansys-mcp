@@ -1,0 +1,2438 @@
+{
+  "$defs": {
+    "AbsoluteTemperature": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "AnalysisSettings": {
+      "additionalProperties": false,
+      "description": "Steady or transient time controls.",
+      "properties": {
+        "end_time": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Duration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "initial_temperature": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AbsoluteTemperature"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "time_step": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Duration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "type": {
+          "default": "steady",
+          "enum": [
+            "steady",
+            "transient"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "AnalysisSettings",
+      "type": "object"
+    },
+    "Area": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "ArtifactsCommandResult": {
+      "additionalProperties": false,
+      "description": "Integrity metadata for artifacts owned by a job.",
+      "properties": {
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/JobArtifactRecord"
+          },
+          "title": "Artifacts",
+          "type": "array"
+        },
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "job_id",
+        "artifacts"
+      ],
+      "title": "ArtifactsCommandResult",
+      "type": "object"
+    },
+    "BackendTarget": {
+      "description": "Solver execution target selected during compilation.",
+      "enum": [
+        "pymechanical",
+        "pyworkbench",
+        "mapdl"
+      ],
+      "title": "BackendTarget",
+      "type": "string"
+    },
+    "BodyAverageTemperatureOutput": {
+      "additionalProperties": false,
+      "description": "Request average temperature for a body role.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "body_average_temperature",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region"
+      ],
+      "title": "BodyAverageTemperatureOutput",
+      "type": "object"
+    },
+    "BodyDescriptor": {
+      "additionalProperties": false,
+      "description": "One solid-body descriptor detached from a live solver object.",
+      "properties": {
+        "bounding_box": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "centroid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "entity_type": {
+          "$ref": "#/$defs/EntityType",
+          "default": "solid"
+        },
+        "internal_runtime_id": {
+          "minLength": 1,
+          "title": "Internal Runtime Id",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        },
+        "named_selections": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Named Selections",
+          "type": "array"
+        },
+        "principal_axes": {
+          "anyOf": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/Vector3"
+                },
+                {
+                  "$ref": "#/$defs/Vector3"
+                },
+                {
+                  "$ref": "#/$defs/Vector3"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Principal Axes"
+        },
+        "principal_dimensions": {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "$ref": "#/$defs/Length"
+            }
+          ],
+          "title": "Principal Dimensions",
+          "type": "array"
+        },
+        "solid": {
+          "default": true,
+          "title": "Solid",
+          "type": "boolean"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "stable_key": {
+          "minLength": 1,
+          "title": "Stable Key",
+          "type": "string"
+        },
+        "surface_area": {
+          "$ref": "#/$defs/Area"
+        },
+        "volume": {
+          "$ref": "#/$defs/Volume"
+        }
+      },
+      "required": [
+        "stable_key",
+        "internal_runtime_id",
+        "display_name",
+        "volume",
+        "surface_area",
+        "centroid",
+        "bounding_box",
+        "principal_dimensions",
+        "source_path"
+      ],
+      "title": "BodyDescriptor",
+      "type": "object"
+    },
+    "BoundaryCondition": {
+      "discriminator": {
+        "mapping": {
+          "convection": "#/$defs/ConvectionBoundary",
+          "heat_flux": "#/$defs/HeatFluxBoundary",
+          "temperature": "#/$defs/TemperatureBoundary",
+          "total_heat": "#/$defs/TotalHeatBoundary",
+          "volumetric_heat_generation": "#/$defs/VolumetricHeatLoad",
+          "volumetric_heat_generation_profile": "#/$defs/TimeSeriesVolumetricHeatLoad"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TemperatureBoundary"
+        },
+        {
+          "$ref": "#/$defs/ConvectionBoundary"
+        },
+        {
+          "$ref": "#/$defs/HeatFluxBoundary"
+        },
+        {
+          "$ref": "#/$defs/TotalHeatBoundary"
+        },
+        {
+          "$ref": "#/$defs/VolumetricHeatLoad"
+        },
+        {
+          "$ref": "#/$defs/TimeSeriesVolumetricHeatLoad"
+        }
+      ]
+    },
+    "BoundingBox": {
+      "additionalProperties": false,
+      "description": "Axis-aligned bounding box in SI model coordinates.",
+      "properties": {
+        "maximum": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "minimum": {
+          "$ref": "#/$defs/Vector3"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "title": "BoundingBox",
+      "type": "object"
+    },
+    "CliCommand": {
+      "description": "Commands with versioned machine-readable output.",
+      "enum": [
+        "doctor",
+        "geometry-doctor",
+        "solver-doctor",
+        "inspect",
+        "resolve",
+        "validate",
+        "plan",
+        "run",
+        "status",
+        "cancel",
+        "results",
+        "artifacts",
+        "recover"
+      ],
+      "title": "CliCommand",
+      "type": "string"
+    },
+    "CommandData": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DoctorCommandResult"
+        },
+        {
+          "$ref": "#/$defs/InspectCommandResult"
+        },
+        {
+          "$ref": "#/$defs/ResolveCommandResult"
+        },
+        {
+          "$ref": "#/$defs/ValidateCommandResult"
+        },
+        {
+          "$ref": "#/$defs/PlanCommandResult"
+        },
+        {
+          "$ref": "#/$defs/RunCommandResult"
+        },
+        {
+          "$ref": "#/$defs/StatusCommandResult"
+        },
+        {
+          "$ref": "#/$defs/ResultsCommandResult"
+        },
+        {
+          "$ref": "#/$defs/ArtifactsCommandResult"
+        },
+        {
+          "$ref": "#/$defs/RecoveryCommandResult"
+        }
+      ]
+    },
+    "CommandError": {
+      "additionalProperties": false,
+      "description": "Stable machine-readable failure payload.",
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "message"
+      ],
+      "title": "CommandError",
+      "type": "object"
+    },
+    "CompilationProvenance": {
+      "additionalProperties": false,
+      "description": "Hashes and software identity used to compile the CAE-IR.",
+      "properties": {
+        "blueprint_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Blueprint Sha256",
+          "type": "string"
+        },
+        "compiled_at": {
+          "title": "Compiled At",
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Sha256",
+          "type": "string"
+        },
+        "recipe_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Recipe Sha256",
+          "type": "string"
+        },
+        "runner_version": {
+          "title": "Runner Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "compiled_at",
+        "runner_version",
+        "blueprint_sha256",
+        "manifest_sha256",
+        "recipe_sha256"
+      ],
+      "title": "CompilationProvenance",
+      "type": "object"
+    },
+    "ConvectionBoundary": {
+      "additionalProperties": false,
+      "description": "Convection film condition.",
+      "properties": {
+        "ambient_temperature": {
+          "$ref": "#/$defs/AbsoluteTemperature"
+        },
+        "film_coefficient": {
+          "$ref": "#/$defs/HeatTransferCoefficient"
+        },
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "convection",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "film_coefficient",
+        "ambient_temperature"
+      ],
+      "title": "ConvectionBoundary",
+      "type": "object"
+    },
+    "CoordinateFrame": {
+      "additionalProperties": false,
+      "description": "Model coordinate frame used by direction-dependent selectors.",
+      "properties": {
+        "origin": {
+          "$ref": "#/$defs/Vector3",
+          "default": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "type": {
+          "$ref": "#/$defs/CoordinateFrameType",
+          "default": "cad_global"
+        },
+        "x_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "y_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "z_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "CoordinateFrame",
+      "type": "object"
+    },
+    "CoordinateFrameType": {
+      "description": "Supported model-frame sources.",
+      "enum": [
+        "cad_global",
+        "explicit",
+        "principal"
+      ],
+      "title": "CoordinateFrameType",
+      "type": "string"
+    },
+    "CoordinateProbeOutput": {
+      "additionalProperties": false,
+      "description": "Request interpolated temperature at a coordinate.",
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "point": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "point_unit": {
+          "$ref": "#/$defs/PointUnit"
+        },
+        "type": {
+          "const": "coordinate_probe",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "point",
+        "point_unit"
+      ],
+      "title": "CoordinateProbeOutput",
+      "type": "object"
+    },
+    "Density": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "DoctorCommandResult": {
+      "additionalProperties": false,
+      "description": "Capability evidence returned by a diagnostic command.",
+      "properties": {
+        "report": {
+          "additionalProperties": true,
+          "title": "Report",
+          "type": "object"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "report"
+      ],
+      "title": "DoctorCommandResult",
+      "type": "object"
+    },
+    "Duration": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "EntityKind": {
+      "description": "Entity class selected by a semantic role.",
+      "enum": [
+        "body",
+        "face"
+      ],
+      "title": "EntityKind",
+      "type": "string"
+    },
+    "EntityType": {
+      "description": "Geometry entity types exposed by the graph.",
+      "enum": [
+        "solid"
+      ],
+      "title": "EntityType",
+      "type": "string"
+    },
+    "ErrorCode": {
+      "description": "Stable error codes exposed by validation and resolution services.",
+      "enum": [
+        "UNIT_REQUIRED",
+        "UNIT_DIMENSION_MISMATCH",
+        "UNIT_NORMALIZATION_MISMATCH",
+        "TEMPERATURE_KIND_MISMATCH",
+        "INVALID_COORDINATE_FRAME",
+        "AMBIGUOUS_COORDINATE_FRAME",
+        "INVALID_SELECTOR",
+        "UNSUPPORTED_SELECTOR_CAPABILITY",
+        "UNRESOLVED_ROLE",
+        "AMBIGUOUS_ROLE",
+        "INVALID_CARDINALITY",
+        "ROLE_DEPENDENCY_CYCLE",
+        "UNKNOWN_ROLE",
+        "PREFLIGHT_VALIDATION_FAILED",
+        "GEOMETRY_CAPABILITY_MISSING",
+        "SOLVER_CAPABILITY_MISSING",
+        "SOURCE_MODEL_MISMATCH",
+        "PATH_OUTSIDE_ROOT",
+        "PATH_TRAVERSAL",
+        "SYMLINK_ESCAPE",
+        "FILE_NOT_FOUND",
+        "UNSUPPORTED_EXTENSION",
+        "YAML_TOO_LARGE",
+        "YAML_UNSAFE",
+        "CONTRACT_INVALID",
+        "ARBITRARY_SCRIPT_FIELD",
+        "JOB_NOT_FOUND",
+        "JOB_CONFLICT",
+        "JOB_STATE_INVALID",
+        "CAPABILITY_UNAVAILABLE",
+        "INTERNAL_ERROR"
+      ],
+      "title": "ErrorCode",
+      "type": "string"
+    },
+    "FaceDescriptor": {
+      "additionalProperties": false,
+      "description": "One face descriptor detached from a live solver object.",
+      "properties": {
+        "adjacent_body_keys": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Adjacent Body Keys",
+          "type": "array"
+        },
+        "area": {
+          "$ref": "#/$defs/Area"
+        },
+        "axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "bounding_box": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "centroid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "external": {
+          "title": "External",
+          "type": "boolean"
+        },
+        "interface": {
+          "title": "Interface",
+          "type": "boolean"
+        },
+        "internal_runtime_id": {
+          "minLength": 1,
+          "title": "Internal Runtime Id",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        },
+        "named_selections": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Named Selections",
+          "type": "array"
+        },
+        "normal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_body_key": {
+          "minLength": 1,
+          "title": "Parent Body Key",
+          "type": "string"
+        },
+        "stable_key": {
+          "minLength": 1,
+          "title": "Stable Key",
+          "type": "string"
+        },
+        "surface_type": {
+          "$ref": "#/$defs/SurfaceType"
+        }
+      },
+      "required": [
+        "stable_key",
+        "internal_runtime_id",
+        "parent_body_key",
+        "display_name",
+        "surface_type",
+        "area",
+        "centroid",
+        "external",
+        "interface",
+        "bounding_box"
+      ],
+      "title": "FaceDescriptor",
+      "type": "object"
+    },
+    "GeometryCapabilityTier": {
+      "description": "Geometry evidence level used to construct a graph.",
+      "enum": [
+        "full_semantic",
+        "source_bound_exact"
+      ],
+      "title": "GeometryCapabilityTier",
+      "type": "string"
+    },
+    "GeometryGraph": {
+      "additionalProperties": false,
+      "description": "Complete deterministic geometry inspection graph for one source model.",
+      "properties": {
+        "bodies": {
+          "items": {
+            "$ref": "#/$defs/BodyDescriptor"
+          },
+          "title": "Bodies",
+          "type": "array"
+        },
+        "capability_tier": {
+          "$ref": "#/$defs/GeometryCapabilityTier",
+          "default": "full_semantic"
+        },
+        "faces": {
+          "items": {
+            "$ref": "#/$defs/FaceDescriptor"
+          },
+          "title": "Faces",
+          "type": "array"
+        },
+        "length_unit": {
+          "const": "m",
+          "default": "m",
+          "title": "Length Unit",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        },
+        "schema_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path",
+        "source_sha256",
+        "bodies",
+        "faces"
+      ],
+      "title": "GeometryGraph",
+      "type": "object"
+    },
+    "GeometryIdentity": {
+      "additionalProperties": false,
+      "description": "Immutable source and inspection identity for a compiled run.",
+      "properties": {
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "length_unit": {
+          "title": "Length Unit",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "sha256",
+        "length_unit",
+        "fingerprint"
+      ],
+      "title": "GeometryIdentity",
+      "type": "object"
+    },
+    "GlobalTemperatureExtremaOutput": {
+      "additionalProperties": false,
+      "description": "Request global minimum and maximum temperature.",
+      "properties": {
+        "type": {
+          "const": "global_temperature_extrema",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "GlobalTemperatureExtremaOutput",
+      "type": "object"
+    },
+    "HeatFlux": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "HeatFluxBoundary": {
+      "additionalProperties": false,
+      "description": "Surface heat-flux condition.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "heat_flux",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/HeatFlux"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "HeatFluxBoundary",
+      "type": "object"
+    },
+    "HeatGenerationPoint": {
+      "additionalProperties": false,
+      "description": "One SI-normalized heat-generation profile sample.",
+      "properties": {
+        "heat_generation_W_m3": {
+          "title": "Heat Generation W M3",
+          "type": "number"
+        },
+        "time_s": {
+          "minimum": 0.0,
+          "title": "Time S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "time_s",
+        "heat_generation_W_m3"
+      ],
+      "title": "HeatGenerationPoint",
+      "type": "object"
+    },
+    "HeatTransferCoefficient": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "HotspotLocationOutput": {
+      "additionalProperties": false,
+      "description": "Request the hottest reported location.",
+      "properties": {
+        "type": {
+          "const": "hotspot_location",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "HotspotLocationOutput",
+      "type": "object"
+    },
+    "InspectCommandResult": {
+      "additionalProperties": false,
+      "description": "Geometry inspection result.",
+      "properties": {
+        "backend": {
+          "title": "Backend",
+          "type": "string"
+        },
+        "geometry": {
+          "$ref": "#/$defs/GeometryGraph"
+        },
+        "model_path": {
+          "title": "Model Path",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "model_path",
+        "backend",
+        "geometry"
+      ],
+      "title": "InspectCommandResult",
+      "type": "object"
+    },
+    "JobArtifactRecord": {
+      "additionalProperties": false,
+      "description": "Immutable integrity metadata for one job artifact.",
+      "properties": {
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "media_type": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "job_id",
+        "path",
+        "kind",
+        "media_type",
+        "size_bytes",
+        "sha256",
+        "created_at"
+      ],
+      "title": "JobArtifactRecord",
+      "type": "object"
+    },
+    "JobEvent": {
+      "additionalProperties": false,
+      "description": "One immutable state transition or operational audit event.",
+      "properties": {
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "event_id": {
+          "minimum": 1,
+          "title": "Event Id",
+          "type": "integer"
+        },
+        "event_type": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Event Type",
+          "type": "string"
+        },
+        "from_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JobStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "sequence": {
+          "minimum": 1,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "to_status": {
+          "$ref": "#/$defs/JobStatus"
+        }
+      },
+      "required": [
+        "event_id",
+        "job_id",
+        "sequence",
+        "to_status",
+        "event_type",
+        "created_at"
+      ],
+      "title": "JobEvent",
+      "type": "object"
+    },
+    "JobRecord": {
+      "additionalProperties": false,
+      "description": "Current durable snapshot for one job.",
+      "properties": {
+        "attempt": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Code"
+        },
+        "error_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Message"
+        },
+        "heartbeat_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heartbeat At"
+        },
+        "heartbeat_timeout_s": {
+          "default": 30.0,
+          "exclusiveMinimum": 0,
+          "title": "Heartbeat Timeout S",
+          "type": "number"
+        },
+        "job_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+          "title": "Job Id",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "launch_timeout_s": {
+          "default": 30.0,
+          "exclusiveMinimum": 0,
+          "title": "Launch Timeout S",
+          "type": "number"
+        },
+        "lease_expires_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lease Expires At"
+        },
+        "request": {
+          "additionalProperties": true,
+          "title": "Request",
+          "type": "object"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/JobStatus"
+        },
+        "updated_at": {
+          "title": "Updated At",
+          "type": "string"
+        },
+        "wall_clock_timeout_s": {
+          "default": 3600.0,
+          "exclusiveMinimum": 0,
+          "title": "Wall Clock Timeout S",
+          "type": "number"
+        },
+        "worker_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Worker Id"
+        }
+      },
+      "required": [
+        "job_id",
+        "kind",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "JobRecord",
+      "type": "object"
+    },
+    "JobStatus": {
+      "description": "Closed state set for durable run orchestration.",
+      "enum": [
+        "QUEUED",
+        "VALIDATING",
+        "STAGING",
+        "WAITING_RESOURCE",
+        "LAUNCHING",
+        "PRECHECKING",
+        "SOLVING",
+        "POSTPROCESSING",
+        "EXPORTING",
+        "SUCCEEDED",
+        "FAILED_INPUT",
+        "FAILED_LAUNCH",
+        "FAILED_LICENSE",
+        "FAILED_PRECHECK",
+        "FAILED_SOLVER",
+        "FAILED_RESOURCE",
+        "FAILED_POSTPROCESS",
+        "FAILED_EXPORT",
+        "CANCEL_REQUESTED",
+        "CANCELLED",
+        "RECOVERY_REQUIRED"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    },
+    "Length": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "MaterialAssignment": {
+      "additionalProperties": false,
+      "description": "Thermal material properties assigned to one semantic body role.",
+      "properties": {
+        "density": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Density"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "specific_heat": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpecificHeat"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "thermal_conductivity": {
+          "$ref": "#/$defs/ThermalConductivity"
+        }
+      },
+      "required": [
+        "thermal_conductivity"
+      ],
+      "title": "MaterialAssignment",
+      "type": "object"
+    },
+    "MeshIntent": {
+      "description": "Supported mesh-density intents.",
+      "enum": [
+        "coarse",
+        "balanced",
+        "fine"
+      ],
+      "title": "MeshIntent",
+      "type": "string"
+    },
+    "PhysicalDimension": {
+      "description": "Supported physical dimensions in v0.x contracts.",
+      "enum": [
+        "length",
+        "area",
+        "volume",
+        "time",
+        "absolute_temperature",
+        "temperature_difference",
+        "thermal_conductivity",
+        "density",
+        "specific_heat",
+        "heat_transfer_coefficient",
+        "heat_flux",
+        "volumetric_heat_generation",
+        "power"
+      ],
+      "title": "PhysicalDimension",
+      "type": "string"
+    },
+    "PhysicalQuantity": {
+      "additionalProperties": false,
+      "description": "Original user quantity paired with a finite SI-normalized value.",
+      "properties": {
+        "dimension": {
+          "$ref": "#/$defs/PhysicalDimension"
+        },
+        "original": {
+          "minLength": 1,
+          "title": "Original",
+          "type": "string"
+        },
+        "si_unit": {
+          "minLength": 1,
+          "title": "Si Unit",
+          "type": "string"
+        },
+        "si_value": {
+          "title": "Si Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "original",
+        "si_value",
+        "si_unit",
+        "dimension"
+      ],
+      "title": "PhysicalQuantity",
+      "type": "object"
+    },
+    "PlanCommandResult": {
+      "additionalProperties": false,
+      "description": "Solver-bound, reviewed analysis plan.",
+      "properties": {
+        "cae_ir": {
+          "$ref": "#/$defs/ResolvedCAEIR"
+        },
+        "recipe_path": {
+          "title": "Recipe Path",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "recipe_path",
+        "run_id",
+        "cae_ir"
+      ],
+      "title": "PlanCommandResult",
+      "type": "object"
+    },
+    "PointUnit": {
+      "description": "Supported coordinate-probe point conventions.",
+      "enum": [
+        "model_length_unit",
+        "normalized_model_coordinates"
+      ],
+      "title": "PointUnit",
+      "type": "string"
+    },
+    "Power": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "RecoveryCommandResult": {
+      "additionalProperties": false,
+      "description": "Safe automatic recovery outcome.",
+      "properties": {
+        "manual_required": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Manual Required",
+          "type": "array"
+        },
+        "recovered": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Recovered",
+          "type": "array"
+        },
+        "requeued": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requeued",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "recovered",
+        "requeued",
+        "manual_required"
+      ],
+      "title": "RecoveryCommandResult",
+      "type": "object"
+    },
+    "RegionAverageTemperatureOutput": {
+      "additionalProperties": false,
+      "description": "Request average temperature for any semantic region.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "region_average_temperature",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region"
+      ],
+      "title": "RegionAverageTemperatureOutput",
+      "type": "object"
+    },
+    "RegionResolution": {
+      "additionalProperties": false,
+      "description": "Resolution of all manifest roles against one geometry graph.",
+      "properties": {
+        "geometry_fingerprint": {
+          "title": "Geometry Fingerprint",
+          "type": "string"
+        },
+        "roles": {
+          "additionalProperties": {
+            "$ref": "#/$defs/RoleResolution"
+          },
+          "title": "Roles",
+          "type": "object"
+        },
+        "schema_version": {
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "geometry_fingerprint",
+        "roles"
+      ],
+      "title": "RegionResolution",
+      "type": "object"
+    },
+    "RequestedOutput": {
+      "discriminator": {
+        "mapping": {
+          "body_average_temperature": "#/$defs/BodyAverageTemperatureOutput",
+          "coordinate_probe": "#/$defs/CoordinateProbeOutput",
+          "global_temperature_extrema": "#/$defs/GlobalTemperatureExtremaOutput",
+          "hotspot_location": "#/$defs/HotspotLocationOutput",
+          "region_average_temperature": "#/$defs/RegionAverageTemperatureOutput",
+          "temperature_field": "#/$defs/TemperatureFieldOutput"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/GlobalTemperatureExtremaOutput"
+        },
+        {
+          "$ref": "#/$defs/BodyAverageTemperatureOutput"
+        },
+        {
+          "$ref": "#/$defs/RegionAverageTemperatureOutput"
+        },
+        {
+          "$ref": "#/$defs/CoordinateProbeOutput"
+        },
+        {
+          "$ref": "#/$defs/HotspotLocationOutput"
+        },
+        {
+          "$ref": "#/$defs/TemperatureFieldOutput"
+        }
+      ]
+    },
+    "ResolutionError": {
+      "additionalProperties": false,
+      "description": "Structured resolution error embedded in a report.",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "message"
+      ],
+      "title": "ResolutionError",
+      "type": "object"
+    },
+    "ResolutionStatus": {
+      "description": "Outcome of resolving a semantic role.",
+      "enum": [
+        "resolved",
+        "unresolved",
+        "ambiguous",
+        "unsupported"
+      ],
+      "title": "ResolutionStatus",
+      "type": "string"
+    },
+    "ResolveCommandResult": {
+      "additionalProperties": false,
+      "description": "Semantic-region resolution result.",
+      "properties": {
+        "manifest_path": {
+          "title": "Manifest Path",
+          "type": "string"
+        },
+        "model_path": {
+          "title": "Model Path",
+          "type": "string"
+        },
+        "recipe_path": {
+          "title": "Recipe Path",
+          "type": "string"
+        },
+        "resolution": {
+          "$ref": "#/$defs/RegionResolution"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "recipe_path",
+        "manifest_path",
+        "model_path",
+        "resolution"
+      ],
+      "title": "ResolveCommandResult",
+      "type": "object"
+    },
+    "ResolvedCAEIR": {
+      "additionalProperties": false,
+      "description": "Only input contract accepted by a solver worker.",
+      "properties": {
+        "analysis_settings": {
+          "$ref": "#/$defs/AnalysisSettings"
+        },
+        "backend_target": {
+          "$ref": "#/$defs/BackendTarget"
+        },
+        "blueprint_id": {
+          "title": "Blueprint Id",
+          "type": "string"
+        },
+        "blueprint_version": {
+          "minimum": 1,
+          "title": "Blueprint Version",
+          "type": "integer"
+        },
+        "boundary_conditions": {
+          "items": {
+            "$ref": "#/$defs/BoundaryCondition"
+          },
+          "title": "Boundary Conditions",
+          "type": "array"
+        },
+        "coordinate_frame": {
+          "$ref": "#/$defs/CoordinateFrame"
+        },
+        "geometry": {
+          "$ref": "#/$defs/GeometryIdentity"
+        },
+        "initial_conditions": {
+          "additionalProperties": true,
+          "title": "Initial Conditions",
+          "type": "object"
+        },
+        "loads": {
+          "items": {
+            "$ref": "#/$defs/BoundaryCondition"
+          },
+          "title": "Loads",
+          "type": "array"
+        },
+        "materials": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MaterialAssignment"
+          },
+          "title": "Materials",
+          "type": "object"
+        },
+        "mesh_policy": {
+          "$ref": "#/$defs/ResolvedMeshPolicy"
+        },
+        "provenance": {
+          "$ref": "#/$defs/CompilationProvenance"
+        },
+        "requested_outputs": {
+          "items": {
+            "$ref": "#/$defs/RequestedOutput"
+          },
+          "title": "Requested Outputs",
+          "type": "array"
+        },
+        "resolved_bodies": {
+          "items": {
+            "$ref": "#/$defs/SelectionEvidence"
+          },
+          "title": "Resolved Bodies",
+          "type": "array"
+        },
+        "resolved_faces": {
+          "items": {
+            "$ref": "#/$defs/SelectionEvidence"
+          },
+          "title": "Resolved Faces",
+          "type": "array"
+        },
+        "resolved_time_profiles": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ResolvedHeatGenerationProfile"
+          },
+          "title": "Resolved Time Profiles",
+          "type": "object"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "selection_evidence": {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/$defs/SelectionEvidence"
+            },
+            "type": "array"
+          },
+          "title": "Selection Evidence",
+          "type": "object"
+        },
+        "validation_summary": {
+          "$ref": "#/$defs/ValidationReport"
+        }
+      },
+      "required": [
+        "run_id",
+        "blueprint_id",
+        "blueprint_version",
+        "geometry",
+        "coordinate_frame",
+        "resolved_bodies",
+        "resolved_faces",
+        "selection_evidence",
+        "materials",
+        "loads",
+        "boundary_conditions",
+        "initial_conditions",
+        "analysis_settings",
+        "mesh_policy",
+        "requested_outputs",
+        "backend_target",
+        "validation_summary",
+        "provenance"
+      ],
+      "title": "ResolvedCAEIR",
+      "type": "object"
+    },
+    "ResolvedHeatGenerationProfile": {
+      "additionalProperties": false,
+      "description": "Immutable CSV content and identity embedded in solver-bound CAE-IR.",
+      "properties": {
+        "points": {
+          "items": {
+            "$ref": "#/$defs/HeatGenerationPoint"
+          },
+          "minItems": 2,
+          "title": "Points",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "source_file": {
+          "minLength": 1,
+          "title": "Source File",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_file",
+        "source_sha256",
+        "points"
+      ],
+      "title": "ResolvedHeatGenerationProfile",
+      "type": "object"
+    },
+    "ResolvedMeshPolicy": {
+      "additionalProperties": false,
+      "description": "Mesh intent with the characteristic length actually selected.",
+      "properties": {
+        "characteristic_length": {
+          "$ref": "#/$defs/Length"
+        },
+        "intent": {
+          "$ref": "#/$defs/MeshIntent"
+        },
+        "local_region_overrides": {
+          "default": [],
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Local Region Overrides",
+          "type": "array"
+        },
+        "maximum_elements": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Elements"
+        },
+        "maximum_size": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "minimum_size": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Length"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "policy_id": {
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "policy_version": {
+          "title": "Policy Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "policy_id",
+        "policy_version",
+        "intent",
+        "characteristic_length"
+      ],
+      "title": "ResolvedMeshPolicy",
+      "type": "object"
+    },
+    "ResultsCommandResult": {
+      "additionalProperties": false,
+      "description": "Small result summary; field arrays remain in artifacts.",
+      "properties": {
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/JobStatus"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        },
+        "worker_result": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Worker Result"
+        }
+      },
+      "required": [
+        "job_id",
+        "status"
+      ],
+      "title": "ResultsCommandResult",
+      "type": "object"
+    },
+    "RoleResolution": {
+      "additionalProperties": false,
+      "description": "Deterministic resolution result for one role.",
+      "properties": {
+        "candidate_keys": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Candidate Keys",
+          "type": "array"
+        },
+        "confidence": {
+          "default": "deterministic",
+          "title": "Confidence",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResolutionError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SelectionEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "selected_count": {
+          "title": "Selected Count",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ResolutionStatus"
+        }
+      },
+      "required": [
+        "role",
+        "status",
+        "selected_count"
+      ],
+      "title": "RoleResolution",
+      "type": "object"
+    },
+    "RunCommandResult": {
+      "additionalProperties": false,
+      "description": "Durable non-blocking job submission result.",
+      "properties": {
+        "job": {
+          "$ref": "#/$defs/JobRecord"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "job"
+      ],
+      "title": "RunCommandResult",
+      "type": "object"
+    },
+    "SelectionEvidence": {
+      "additionalProperties": false,
+      "description": "Why one run-local entity was selected for a semantic role.",
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/EntityKind"
+        },
+        "geometry_fingerprint": {
+          "title": "Geometry Fingerprint",
+          "type": "string"
+        },
+        "internal_runtime_id": {
+          "title": "Internal Runtime Id",
+          "type": "string"
+        },
+        "measurements": {
+          "additionalProperties": true,
+          "title": "Measurements",
+          "type": "object"
+        },
+        "selector": {
+          "additionalProperties": true,
+          "title": "Selector",
+          "type": "object"
+        },
+        "semantic_role": {
+          "title": "Semantic Role",
+          "type": "string"
+        },
+        "stable_key": {
+          "title": "Stable Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "semantic_role",
+        "stable_key",
+        "internal_runtime_id",
+        "entity",
+        "selector",
+        "geometry_fingerprint",
+        "measurements"
+      ],
+      "title": "SelectionEvidence",
+      "type": "object"
+    },
+    "SpecificHeat": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "StatusCommandResult": {
+      "additionalProperties": false,
+      "description": "Current job snapshot plus immutable audit history.",
+      "properties": {
+        "events": {
+          "items": {
+            "$ref": "#/$defs/JobEvent"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "job": {
+          "$ref": "#/$defs/JobRecord"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "job",
+        "events"
+      ],
+      "title": "StatusCommandResult",
+      "type": "object"
+    },
+    "SurfaceType": {
+      "description": "Surface classifications available to v0.x selectors.",
+      "enum": [
+        "planar",
+        "cylindrical",
+        "conical",
+        "spherical",
+        "other",
+        "unknown"
+      ],
+      "title": "SurfaceType",
+      "type": "string"
+    },
+    "TemperatureBoundary": {
+      "additionalProperties": false,
+      "description": "Prescribed absolute temperature.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "temperature",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/AbsoluteTemperature"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "TemperatureBoundary",
+      "type": "object"
+    },
+    "TemperatureFieldOutput": {
+      "additionalProperties": false,
+      "description": "Request a persisted temperature field artifact.",
+      "properties": {
+        "times": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Duration"
+          },
+          "title": "Times",
+          "type": "array"
+        },
+        "type": {
+          "const": "temperature_field",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "TemperatureFieldOutput",
+      "type": "object"
+    },
+    "ThermalConductivity": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "TimeSeriesVolumetricHeatLoad": {
+      "additionalProperties": false,
+      "description": "Volumetric heat generation read from a bounded two-column CSV profile.",
+      "properties": {
+        "profile_file": {
+          "minLength": 1,
+          "title": "Profile File",
+          "type": "string"
+        },
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "volumetric_heat_generation_profile",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "profile_file"
+      ],
+      "title": "TimeSeriesVolumetricHeatLoad",
+      "type": "object"
+    },
+    "TotalHeatBoundary": {
+      "additionalProperties": false,
+      "description": "Total heat applied to a semantic region.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "total_heat",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/Power"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "TotalHeatBoundary",
+      "type": "object"
+    },
+    "ValidateCommandResult": {
+      "additionalProperties": false,
+      "description": "Cross-contract preflight validation result.",
+      "properties": {
+        "recipe_path": {
+          "title": "Recipe Path",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "validation": {
+          "$ref": "#/$defs/ValidationReport"
+        }
+      },
+      "required": [
+        "recipe_path",
+        "validation"
+      ],
+      "title": "ValidateCommandResult",
+      "type": "object"
+    },
+    "ValidationIssue": {
+      "additionalProperties": false,
+      "description": "One stable validation finding.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/ValidationSeverity",
+          "default": "error"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "message"
+      ],
+      "title": "ValidationIssue",
+      "type": "object"
+    },
+    "ValidationReport": {
+      "additionalProperties": false,
+      "description": "Complete preflight result for a compiled run.",
+      "properties": {
+        "issues": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ValidationIssue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "valid": {
+          "title": "Valid",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "valid"
+      ],
+      "title": "ValidationReport",
+      "type": "object"
+    },
+    "ValidationSeverity": {
+      "description": "Severity of a preflight validation issue.",
+      "enum": [
+        "error",
+        "warning"
+      ],
+      "title": "ValidationSeverity",
+      "type": "string"
+    },
+    "Vector3": {
+      "description": "Finite three-dimensional vector serialized as a JSON array.",
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Vector3",
+      "type": "array"
+    },
+    "Volume": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "VolumetricHeatGeneration": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/PhysicalQuantity"
+        }
+      ]
+    },
+    "VolumetricHeatLoad": {
+      "additionalProperties": false,
+      "description": "Uniform volumetric heat generation in a body role.",
+      "properties": {
+        "region": {
+          "minLength": 1,
+          "title": "Region",
+          "type": "string"
+        },
+        "type": {
+          "const": "volumetric_heat_generation",
+          "title": "Type",
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/VolumetricHeatGeneration"
+        }
+      },
+      "required": [
+        "type",
+        "region",
+        "value"
+      ],
+      "title": "VolumetricHeatLoad",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/cli-response.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Stable success/failure envelope emitted by every G8 command.",
+  "properties": {
+    "command": {
+      "$ref": "#/$defs/CliCommand"
+    },
+    "data": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CommandData"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CommandError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "ok": {
+      "title": "Ok",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "command",
+    "ok"
+  ],
+  "title": "CliResponse",
+  "type": "object"
+}

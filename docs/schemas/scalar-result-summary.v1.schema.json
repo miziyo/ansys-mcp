@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "HotspotSummary": {
+      "additionalProperties": false,
+      "description": "Hottest reported location and value.",
+      "properties": {
+        "position_m": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "value_K": {
+          "title": "Value K",
+          "type": "number"
+        }
+      },
+      "required": [
+        "position_m",
+        "value_K"
+      ],
+      "title": "HotspotSummary",
+      "type": "object"
+    },
+    "TemperatureSummary": {
+      "additionalProperties": false,
+      "description": "Finite scalar temperature summary in kelvin.",
+      "properties": {
+        "maximum_K": {
+          "title": "Maximum K",
+          "type": "number"
+        },
+        "minimum_K": {
+          "title": "Minimum K",
+          "type": "number"
+        },
+        "volume_average_K": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Volume Average K"
+        }
+      },
+      "required": [
+        "minimum_K",
+        "maximum_K"
+      ],
+      "title": "TemperatureSummary",
+      "type": "object"
+    },
+    "Vector3": {
+      "description": "Finite three-dimensional vector serialized as a JSON array.",
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Vector3",
+      "type": "array"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/scalar-result-summary.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Versioned common scalar result payload.",
+  "properties": {
+    "hotspot": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HotspotSummary"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "temperature": {
+      "$ref": "#/$defs/TemperatureSummary"
+    }
+  },
+  "required": [
+    "temperature"
+  ],
+  "title": "ScalarResultSummary",
+  "type": "object"
+}

@@ -1,0 +1,780 @@
+{
+  "$defs": {
+    "AllSelector": {
+      "additionalProperties": false,
+      "description": "Sequential intersection of selector children.",
+      "properties": {
+        "all": {
+          "items": {
+            "$ref": "#/$defs/SelectorExpression"
+          },
+          "minItems": 1,
+          "title": "All",
+          "type": "array"
+        }
+      },
+      "required": [
+        "all"
+      ],
+      "title": "AllSelector",
+      "type": "object"
+    },
+    "AnySelector": {
+      "additionalProperties": false,
+      "description": "Union of selector children.",
+      "properties": {
+        "any": {
+          "items": {
+            "$ref": "#/$defs/SelectorExpression"
+          },
+          "minItems": 1,
+          "title": "Any",
+          "type": "array"
+        }
+      },
+      "required": [
+        "any"
+      ],
+      "title": "AnySelector",
+      "type": "object"
+    },
+    "AreaRelativeRangePredicate": {
+      "additionalProperties": false,
+      "description": "Filter face area relative to the largest candidate.",
+      "properties": {
+        "area_relative_range": {
+          "$ref": "#/$defs/RelativeRange"
+        }
+      },
+      "required": [
+        "area_relative_range"
+      ],
+      "title": "AreaRelativeRangePredicate",
+      "type": "object"
+    },
+    "AxisName": {
+      "description": "Local coordinate axes accepted by directional predicates.",
+      "enum": [
+        "local_x",
+        "local_y",
+        "local_z"
+      ],
+      "title": "AxisName",
+      "type": "string"
+    },
+    "AxisToleranceSpec": {
+      "additionalProperties": false,
+      "description": "Axis alignment with an angular tolerance.",
+      "properties": {
+        "axis": {
+          "$ref": "#/$defs/AxisName"
+        },
+        "tolerance_deg": {
+          "default": 5.0,
+          "maximum": 90.0,
+          "minimum": 0.0,
+          "title": "Tolerance Deg",
+          "type": "number"
+        }
+      },
+      "required": [
+        "axis"
+      ],
+      "title": "AxisToleranceSpec",
+      "type": "object"
+    },
+    "BoundingBoxExtremePredicate": {
+      "additionalProperties": false,
+      "description": "Select entities tied at an exact source bounding-box extreme.",
+      "properties": {
+        "bounding_box_extreme": {
+          "$ref": "#/$defs/BoundingBoxExtremeSpec"
+        }
+      },
+      "required": [
+        "bounding_box_extreme"
+      ],
+      "title": "BoundingBoxExtremePredicate",
+      "type": "object"
+    },
+    "BoundingBoxExtremeSpec": {
+      "additionalProperties": false,
+      "description": "Extreme of an exact source-axis-aligned bounding box.",
+      "properties": {
+        "axis": {
+          "$ref": "#/$defs/GlobalAxisName"
+        },
+        "side": {
+          "$ref": "#/$defs/ExtremeSide"
+        },
+        "tolerance_relative": {
+          "default": 1e-09,
+          "minimum": 0.0,
+          "title": "Tolerance Relative",
+          "type": "number"
+        }
+      },
+      "required": [
+        "axis",
+        "side"
+      ],
+      "title": "BoundingBoxExtremeSpec",
+      "type": "object"
+    },
+    "Cardinality": {
+      "description": "Supported role cardinality constraints.",
+      "enum": [
+        "exactly_one",
+        "zero_or_one",
+        "one_or_more",
+        "zero_or_more",
+        "exactly_n"
+      ],
+      "title": "Cardinality",
+      "type": "string"
+    },
+    "CentroidExtremePredicate": {
+      "additionalProperties": false,
+      "description": "Select all entities tied at a local centroid extreme.",
+      "properties": {
+        "centroid_extreme": {
+          "$ref": "#/$defs/CentroidExtremeSpec"
+        }
+      },
+      "required": [
+        "centroid_extreme"
+      ],
+      "title": "CentroidExtremePredicate",
+      "type": "object"
+    },
+    "CentroidExtremeSpec": {
+      "additionalProperties": false,
+      "description": "Centroid extreme along one local axis.",
+      "properties": {
+        "axis": {
+          "$ref": "#/$defs/AxisName"
+        },
+        "side": {
+          "$ref": "#/$defs/ExtremeSide"
+        },
+        "tolerance_relative": {
+          "default": 1e-09,
+          "minimum": 0.0,
+          "title": "Tolerance Relative",
+          "type": "number"
+        }
+      },
+      "required": [
+        "axis",
+        "side"
+      ],
+      "title": "CentroidExtremeSpec",
+      "type": "object"
+    },
+    "CentroidPercentilePredicate": {
+      "additionalProperties": false,
+      "description": "Filter entities by normalized centroid-position percentile.",
+      "properties": {
+        "centroid_percentile": {
+          "$ref": "#/$defs/CentroidPercentileSpec"
+        }
+      },
+      "required": [
+        "centroid_percentile"
+      ],
+      "title": "CentroidPercentilePredicate",
+      "type": "object"
+    },
+    "CentroidPercentileSpec": {
+      "additionalProperties": false,
+      "description": "Inclusive normalized centroid-position percentile interval.",
+      "properties": {
+        "axis": {
+          "$ref": "#/$defs/AxisName"
+        },
+        "maximum": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Maximum",
+          "type": "number"
+        },
+        "minimum": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Minimum",
+          "type": "number"
+        }
+      },
+      "required": [
+        "axis",
+        "minimum",
+        "maximum"
+      ],
+      "title": "CentroidPercentileSpec",
+      "type": "object"
+    },
+    "CentroidSidePredicate": {
+      "additionalProperties": false,
+      "description": "Filter centroid side in the selected coordinate frame.",
+      "properties": {
+        "centroid_side": {
+          "$ref": "#/$defs/CentroidSideSpec"
+        }
+      },
+      "required": [
+        "centroid_side"
+      ],
+      "title": "CentroidSidePredicate",
+      "type": "object"
+    },
+    "CentroidSideSpec": {
+      "additionalProperties": false,
+      "description": "Side of a local coordinate plane.",
+      "properties": {
+        "axis": {
+          "$ref": "#/$defs/AxisName"
+        },
+        "offset": {
+          "default": 0.0,
+          "title": "Offset",
+          "type": "number"
+        },
+        "side": {
+          "$ref": "#/$defs/CoordinateSide"
+        },
+        "tolerance": {
+          "default": 1e-12,
+          "minimum": 0.0,
+          "title": "Tolerance",
+          "type": "number"
+        }
+      },
+      "required": [
+        "axis",
+        "side"
+      ],
+      "title": "CentroidSideSpec",
+      "type": "object"
+    },
+    "CoordinateFrame": {
+      "additionalProperties": false,
+      "description": "Model coordinate frame used by direction-dependent selectors.",
+      "properties": {
+        "origin": {
+          "$ref": "#/$defs/Vector3",
+          "default": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "type": {
+          "$ref": "#/$defs/CoordinateFrameType",
+          "default": "cad_global"
+        },
+        "x_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "y_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "z_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Vector3"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "CoordinateFrame",
+      "type": "object"
+    },
+    "CoordinateFrameType": {
+      "description": "Supported model-frame sources.",
+      "enum": [
+        "cad_global",
+        "explicit",
+        "principal"
+      ],
+      "title": "CoordinateFrameType",
+      "type": "string"
+    },
+    "CoordinateSide": {
+      "description": "Positive or negative side of a local coordinate plane.",
+      "enum": [
+        "positive",
+        "negative"
+      ],
+      "title": "CoordinateSide",
+      "type": "string"
+    },
+    "EntityKind": {
+      "description": "Entity class selected by a semantic role.",
+      "enum": [
+        "body",
+        "face"
+      ],
+      "title": "EntityKind",
+      "type": "string"
+    },
+    "ExternalOfPredicate": {
+      "additionalProperties": false,
+      "description": "Filter external faces belonging to a resolved body role.",
+      "properties": {
+        "external_of": {
+          "minLength": 1,
+          "title": "External Of",
+          "type": "string"
+        }
+      },
+      "required": [
+        "external_of"
+      ],
+      "title": "ExternalOfPredicate",
+      "type": "object"
+    },
+    "ExtremeSide": {
+      "description": "Minimum or maximum coordinate extreme.",
+      "enum": [
+        "minimum",
+        "maximum"
+      ],
+      "title": "ExtremeSide",
+      "type": "string"
+    },
+    "GlobalAxisName": {
+      "description": "Axes of the source CAD global coordinate system.",
+      "enum": [
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "GlobalAxisName",
+      "type": "string"
+    },
+    "InterfacePredicate": {
+      "additionalProperties": false,
+      "description": "Filter by interface classification.",
+      "properties": {
+        "interface": {
+          "title": "Interface",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "interface"
+      ],
+      "title": "InterfacePredicate",
+      "type": "object"
+    },
+    "LargestVolumePredicate": {
+      "additionalProperties": false,
+      "description": "Select all bodies tied for largest volume.",
+      "properties": {
+        "largest_volume": {
+          "title": "Largest Volume",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "largest_volume"
+      ],
+      "title": "LargestVolumePredicate",
+      "type": "object"
+    },
+    "ModelSource": {
+      "additionalProperties": false,
+      "description": "Source CAD reference and its explicit length unit.",
+      "properties": {
+        "file": {
+          "minLength": 1,
+          "title": "File",
+          "type": "string"
+        },
+        "length_unit": {
+          "minLength": 1,
+          "title": "Length Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "length_unit"
+      ],
+      "title": "ModelSource",
+      "type": "object"
+    },
+    "NameRegexPredicate": {
+      "additionalProperties": false,
+      "description": "Filter display names with a regular expression.",
+      "properties": {
+        "name_regex": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Name Regex",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name_regex"
+      ],
+      "title": "NameRegexPredicate",
+      "type": "object"
+    },
+    "NamedSelectionPredicate": {
+      "additionalProperties": false,
+      "description": "Filter entities by exact case-sensitive Ansys Named Selection membership.",
+      "properties": {
+        "named_selection": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Named Selection",
+          "type": "string"
+        }
+      },
+      "required": [
+        "named_selection"
+      ],
+      "title": "NamedSelectionPredicate",
+      "type": "object"
+    },
+    "NearestPointSpec": {
+      "additionalProperties": false,
+      "description": "Nearest entity-centroid query in local coordinates.",
+      "properties": {
+        "point": {
+          "$ref": "#/$defs/Vector3"
+        },
+        "tie_tolerance": {
+          "default": 1e-12,
+          "minimum": 0.0,
+          "title": "Tie Tolerance",
+          "type": "number"
+        }
+      },
+      "required": [
+        "point"
+      ],
+      "title": "NearestPointSpec",
+      "type": "object"
+    },
+    "NearestToPointPredicate": {
+      "additionalProperties": false,
+      "description": "Select all entities tied for nearest centroid.",
+      "properties": {
+        "nearest_to_point": {
+          "$ref": "#/$defs/NearestPointSpec"
+        }
+      },
+      "required": [
+        "nearest_to_point"
+      ],
+      "title": "NearestToPointPredicate",
+      "type": "object"
+    },
+    "NormalParallelToPredicate": {
+      "additionalProperties": false,
+      "description": "Filter planar normals parallel or antiparallel to a local axis.",
+      "properties": {
+        "normal_parallel_to": {
+          "$ref": "#/$defs/AxisToleranceSpec"
+        }
+      },
+      "required": [
+        "normal_parallel_to"
+      ],
+      "title": "NormalParallelToPredicate",
+      "type": "object"
+    },
+    "NotSelector": {
+      "additionalProperties": false,
+      "description": "Complement of one selector child.",
+      "properties": {
+        "not": {
+          "$ref": "#/$defs/SelectorExpression"
+        }
+      },
+      "required": [
+        "not"
+      ],
+      "title": "NotSelector",
+      "type": "object"
+    },
+    "ParentBodyRolePredicate": {
+      "additionalProperties": false,
+      "description": "Filter faces whose parent belongs to a resolved body role.",
+      "properties": {
+        "parent_body_role": {
+          "minLength": 1,
+          "title": "Parent Body Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_body_role"
+      ],
+      "title": "ParentBodyRolePredicate",
+      "type": "object"
+    },
+    "RelativeRange": {
+      "additionalProperties": false,
+      "description": "Inclusive range relative to the largest candidate measure.",
+      "properties": {
+        "maximum": {
+          "minimum": 0.0,
+          "title": "Maximum",
+          "type": "number"
+        },
+        "minimum": {
+          "minimum": 0.0,
+          "title": "Minimum",
+          "type": "number"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "title": "RelativeRange",
+      "type": "object"
+    },
+    "RoleDefinition": {
+      "additionalProperties": false,
+      "description": "Entity type, cardinality, and selector for one semantic role.",
+      "properties": {
+        "cardinality": {
+          "$ref": "#/$defs/Cardinality"
+        },
+        "count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Count"
+        },
+        "entity": {
+          "$ref": "#/$defs/EntityKind"
+        },
+        "selector": {
+          "$ref": "#/$defs/SelectorExpression"
+        }
+      },
+      "required": [
+        "entity",
+        "cardinality",
+        "selector"
+      ],
+      "title": "RoleDefinition",
+      "type": "object"
+    },
+    "SelectorExpression": {
+      "$ref": "#/$defs/SelectorNode",
+      "description": "One recursively composed, data-only selector expression.",
+      "title": "SelectorExpression"
+    },
+    "SelectorNode": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AllSelector"
+        },
+        {
+          "$ref": "#/$defs/AnySelector"
+        },
+        {
+          "$ref": "#/$defs/NotSelector"
+        },
+        {
+          "$ref": "#/$defs/SolidBodyPredicate"
+        },
+        {
+          "$ref": "#/$defs/NameRegexPredicate"
+        },
+        {
+          "$ref": "#/$defs/NamedSelectionPredicate"
+        },
+        {
+          "$ref": "#/$defs/VolumeRelativeRangePredicate"
+        },
+        {
+          "$ref": "#/$defs/CentroidSidePredicate"
+        },
+        {
+          "$ref": "#/$defs/LargestVolumePredicate"
+        },
+        {
+          "$ref": "#/$defs/NearestToPointPredicate"
+        },
+        {
+          "$ref": "#/$defs/ExternalOfPredicate"
+        },
+        {
+          "$ref": "#/$defs/InterfacePredicate"
+        },
+        {
+          "$ref": "#/$defs/ParentBodyRolePredicate"
+        },
+        {
+          "$ref": "#/$defs/SurfaceTypePredicate"
+        },
+        {
+          "$ref": "#/$defs/NormalParallelToPredicate"
+        },
+        {
+          "$ref": "#/$defs/CentroidExtremePredicate"
+        },
+        {
+          "$ref": "#/$defs/BoundingBoxExtremePredicate"
+        },
+        {
+          "$ref": "#/$defs/CentroidPercentilePredicate"
+        },
+        {
+          "$ref": "#/$defs/AreaRelativeRangePredicate"
+        }
+      ]
+    },
+    "SolidBodyPredicate": {
+      "additionalProperties": false,
+      "description": "Filter by solid-body status.",
+      "properties": {
+        "solid_body": {
+          "title": "Solid Body",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "solid_body"
+      ],
+      "title": "SolidBodyPredicate",
+      "type": "object"
+    },
+    "SurfaceType": {
+      "description": "Surface classifications available to v0.x selectors.",
+      "enum": [
+        "planar",
+        "cylindrical",
+        "conical",
+        "spherical",
+        "other",
+        "unknown"
+      ],
+      "title": "SurfaceType",
+      "type": "string"
+    },
+    "SurfaceTypePredicate": {
+      "additionalProperties": false,
+      "description": "Filter face surface classification.",
+      "properties": {
+        "surface_type": {
+          "$ref": "#/$defs/SurfaceType"
+        }
+      },
+      "required": [
+        "surface_type"
+      ],
+      "title": "SurfaceTypePredicate",
+      "type": "object"
+    },
+    "Vector3": {
+      "description": "Finite three-dimensional vector serialized as a JSON array.",
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Vector3",
+      "type": "array"
+    },
+    "VolumeRelativeRangePredicate": {
+      "additionalProperties": false,
+      "description": "Filter body volume relative to the largest candidate.",
+      "properties": {
+        "volume_relative_range": {
+          "$ref": "#/$defs/RelativeRange"
+        }
+      },
+      "required": [
+        "volume_relative_range"
+      ],
+      "title": "VolumeRelativeRangePredicate",
+      "type": "object"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/model-manifest.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Thin data-only mapping from one CAD model to semantic roles.",
+  "properties": {
+    "coordinate_frame": {
+      "$ref": "#/$defs/CoordinateFrame",
+      "default": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "cad_global",
+        "x_axis": null,
+        "y_axis": null,
+        "z_axis": null
+      }
+    },
+    "model": {
+      "$ref": "#/$defs/ModelSource"
+    },
+    "roles": {
+      "additionalProperties": {
+        "$ref": "#/$defs/RoleDefinition"
+      },
+      "minProperties": 1,
+      "title": "Roles",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "model",
+    "roles"
+  ],
+  "title": "ModelManifest",
+  "type": "object"
+}

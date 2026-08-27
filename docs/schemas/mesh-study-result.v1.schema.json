@@ -1,0 +1,274 @@
+{
+  "$defs": {
+    "ExecutionStatus": {
+      "description": "Execution outcomes kept separate from numerical and physical quality.",
+      "enum": [
+        "SUCCEEDED",
+        "FAILED_LAUNCH",
+        "FAILED_PRECHECK",
+        "FAILED_SOLVER",
+        "FAILED_POSTPROCESS",
+        "BLOCKED_ENVIRONMENT",
+        "CANCELLED"
+      ],
+      "title": "ExecutionStatus",
+      "type": "string"
+    },
+    "MeshIntent": {
+      "description": "Supported mesh-density intents.",
+      "enum": [
+        "coarse",
+        "balanced",
+        "fine"
+      ],
+      "title": "MeshIntent",
+      "type": "string"
+    },
+    "MeshStudyChild": {
+      "additionalProperties": false,
+      "description": "One independent child-run observation used by the aggregator.",
+      "properties": {
+        "absolute_difference": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Absolute Difference"
+        },
+        "element_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Element Count"
+        },
+        "execution_status": {
+          "$ref": "#/$defs/ExecutionStatus"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "physical_verification_status": {
+          "$ref": "#/$defs/VerificationStatus"
+        },
+        "profile": {
+          "$ref": "#/$defs/MeshIntent"
+        },
+        "relative_difference": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Difference"
+        },
+        "run_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "runtime_s": {
+          "minimum": 0.0,
+          "title": "Runtime S",
+          "type": "number"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "target_metric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Metric Value"
+        },
+        "workdir": {
+          "format": "path",
+          "title": "Workdir",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile",
+        "run_id",
+        "workdir",
+        "execution_status",
+        "physical_verification_status",
+        "runtime_s"
+      ],
+      "title": "MeshStudyChild",
+      "type": "object"
+    },
+    "MeshStudyExecution": {
+      "description": "Aggregate execution status independent of convergence verification.",
+      "enum": [
+        "SUCCEEDED",
+        "PARTIAL",
+        "FAILED"
+      ],
+      "title": "MeshStudyExecution",
+      "type": "string"
+    },
+    "MeshVerificationRequest": {
+      "additionalProperties": false,
+      "description": "Practical convergence criterion for an explicit three-profile mesh study.",
+      "properties": {
+        "absolute_tolerance_K": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Absolute Tolerance K"
+        },
+        "profiles": {
+          "default": [
+            "coarse",
+            "balanced",
+            "fine"
+          ],
+          "items": {
+            "$ref": "#/$defs/MeshIntent"
+          },
+          "title": "Profiles",
+          "type": "array"
+        },
+        "relative_tolerance": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Relative Tolerance"
+        },
+        "target_metric": {
+          "default": "volume_average_temperature_K",
+          "enum": [
+            "minimum_temperature_K",
+            "maximum_temperature_K",
+            "volume_average_temperature_K"
+          ],
+          "title": "Target Metric",
+          "type": "string"
+        }
+      },
+      "title": "MeshVerificationRequest",
+      "type": "object"
+    },
+    "VerificationStatus": {
+      "description": "Allowed status values for independent result checks.",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "NOT_RUN",
+        "NOT_AVAILABLE",
+        "INCONCLUSIVE",
+        "PARTIAL"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "$id": "https://ansys-research-runner.local/schemas/mesh-study-result.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Aggregation that keeps execution, physics, and mesh convergence distinct.",
+  "properties": {
+    "children": {
+      "items": {
+        "$ref": "#/$defs/MeshStudyChild"
+      },
+      "title": "Children",
+      "type": "array"
+    },
+    "criterion": {
+      "$ref": "#/$defs/MeshVerificationRequest"
+    },
+    "execution": {
+      "$ref": "#/$defs/MeshStudyExecution"
+    },
+    "mesh_verification": {
+      "$ref": "#/$defs/VerificationStatus"
+    },
+    "reference_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MeshIntent"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "study_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$",
+      "title": "Study Id",
+      "type": "string"
+    },
+    "target_metric": {
+      "title": "Target Metric",
+      "type": "string"
+    }
+  },
+  "required": [
+    "study_id",
+    "execution",
+    "mesh_verification",
+    "target_metric",
+    "criterion",
+    "children"
+  ],
+  "title": "MeshStudyResult",
+  "type": "object"
+}

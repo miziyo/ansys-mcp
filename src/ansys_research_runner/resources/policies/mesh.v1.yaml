@@ -1,0 +1,9 @@
+schema_version: 1
+policy_id: thermal_mesh_intent
+policies:
+  coarse:
+    diagonal_divisor: 15
+  balanced:
+    diagonal_divisor: 25
+  fine:
+    diagonal_divisor: 40

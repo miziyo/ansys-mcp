@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "run_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id"
+        ],
+        "type": "object"
+      },
+      "name": "cancel_run"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "live": {
+            "default": false,
+            "type": "boolean"
+          },
+          "timeout_seconds": {
+            "default": 30.0,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "name": "doctor"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "run_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id"
+        ],
+        "type": "object"
+      },
+      "name": "get_run_status"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "run_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id"
+        ],
+        "type": "object"
+      },
+      "name": "get_run_summary"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "model_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_path"
+        ],
+        "type": "object"
+      },
+      "name": "inspect_model"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "run_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id"
+        ],
+        "type": "object"
+      },
+      "name": "list_run_artifacts"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "recipe_path": {
+            "type": "string"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "recipe_path"
+        ],
+        "type": "object"
+      },
+      "name": "plan_run"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "recipe_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "recipe_path"
+        ],
+        "type": "object"
+      },
+      "name": "resolve_regions"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "recipe_path": {
+            "type": "string"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "recipe_path"
+        ],
+        "type": "object"
+      },
+      "name": "start_run"
+    },
+    {
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "recipe_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "recipe_path"
+        ],
+        "type": "object"
+      },
+      "name": "validate_run"
+    }
+  ]
+}
