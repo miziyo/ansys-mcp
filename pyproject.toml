@@ -69,6 +69,7 @@ exclude = [
 [tool.hatch.build.targets.sdist]
 only-include = [
     "/docs",
+    "/integrations",
     "/scripts",
     "/src",
     "/tests",
@@ -79,10 +80,13 @@ only-include = [
     "/CHANGELOG.md",
     "/CONTRIBUTING.md",
     "/LICENSE",
+    "/package-lock.json",
+    "/package.json",
     "/README.md",
     "/SECURITY.md",
     "/THIRD_PARTY_NOTICES.md",
     "/pyproject.toml",
+    "/tsconfig.json",
     "/uv.lock",
 ]
 
