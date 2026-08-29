@@ -1,5 +1,9 @@
 # ansys-mcp
 
+[![English](https://img.shields.io/badge/README-English-2563eb)](README.md)
+[![한국어](https://img.shields.io/badge/README-%ED%95%9C%EA%B5%AD%EC%96%B4-16a34a)](README.ko.md)
+[![日本語](https://img.shields.io/badge/README-%E6%97%A5%E6%9C%AC%E8%AA%9E-dc2626)](README.ja.md)
+
 A local, closed-surface MCP and command-line runner for bounded thermal workflows on an installed
 Ansys system. The public repository contains project-owned source, schemas, generated test geometry,
 and tests only. It does **not** redistribute Ansys or PyAnsys tutorials, example datasets, product
@@ -101,7 +105,7 @@ Pi intentionally has no built-in MCP client. This repository therefore includes 
 extension that bridges the same ten tools through the official MCP TypeScript SDK; it does not add
 another product execution surface.
 
-After the `v0.13.0` release is available:
+Install the `v0.13.0` release:
 
 ```powershell
 uv tool install "ansys-research-runner @ git+https://github.com/miziyo/ansys-mcp.git@v0.13.0" --python 3.12

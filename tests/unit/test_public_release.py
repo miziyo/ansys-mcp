@@ -52,6 +52,16 @@ def test_python_and_pi_package_versions_match() -> None:
     assert f'version: "{__version__}"' in extension
 
 
+def test_readme_language_navigation_is_complete() -> None:
+    root = Path(__file__).resolve().parents[2]
+    readmes = ("README.md", "README.ko.md", "README.ja.md")
+
+    for source_name in readmes:
+        source = (root / source_name).read_text(encoding="utf-8")
+        for target_name in readmes:
+            assert f"]({target_name})" in source
+
+
 def test_project_owned_geometry_assets_match_their_generators_manifest() -> None:
     assets = resource_path("geometry")
     manifest = json.loads((assets / "manifest.json").read_text(encoding="utf-8"))
